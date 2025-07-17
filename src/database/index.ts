@@ -1,6 +1,6 @@
-import { join } from 'path';
-import { createConnection, ConnectionOptions } from 'typeorm';
-import { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB } from '@config';
+import { join } from 'path'
+import { createConnection, ConnectionOptions } from 'typeorm'
+import { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB } from '@config'
 
 export const dbConnection = async () => {
   const dbConfig: ConnectionOptions = {
@@ -20,7 +20,7 @@ export const dbConnection = async () => {
       migrationsDir: 'src/migration',
       subscribersDir: 'src/subscriber',
     },
-  };
+  }
 
-  await createConnection(dbConfig);
+  await createConnection(dbConfig)
 }

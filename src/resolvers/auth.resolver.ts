@@ -1,7 +1,7 @@
-import { Authorized, Arg, Ctx, Mutation, Resolver } from 'type-graphql';
-import { CreateUserDto } from '@dtos/users.dto';
-import { AuthRepository } from '@repositories/auth.repository';
-import { User } from '@typedefs/users.type';
+import { Authorized, Arg, Ctx, Mutation, Resolver } from 'type-graphql'
+import { CreateUserDto } from '@dtos/users.dto'
+import { AuthRepository } from '@repositories/auth.repository'
+import { User } from '@typedefs/users.type'
 
 @Resolver()
 export class AuthResolver extends AuthRepository {
@@ -9,16 +9,16 @@ export class AuthResolver extends AuthRepository {
     description: 'User signup',
   })
   async signup(@Arg('userData') userData: CreateUserDto): Promise<User> {
-    const user: User = await this.userSignUp(userData);
-    return user;
+    const user: User = await this.userSignUp(userData)
+    return user
   }
 
   @Mutation(() => User, {
     description: 'User login',
   })
   async login(@Arg('userData') userData: CreateUserDto): Promise<User> {
-    const { findUser } = await this.userLogIn(userData);
-    return findUser;
+    const { findUser } = await this.userLogIn(userData)
+    return findUser
   }
 
   @Authorized()
@@ -26,7 +26,7 @@ export class AuthResolver extends AuthRepository {
     description: 'User logout',
   })
   async logout(@Ctx('user') userData: any): Promise<User> {
-    const user = await this.userLogOut(userData);
-    return user;
+    const user = await this.userLogOut(userData)
+    return user
   }
 }

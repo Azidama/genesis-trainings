@@ -1,19 +1,19 @@
-import { existsSync, mkdirSync } from 'fs';
-import { join } from 'path';
-import winston from 'winston';
-import winstonDaily from 'winston-daily-rotate-file';
-import { LOG_DIR } from '@config';
-import { HttpException } from '@exceptions/httpException';
+import { existsSync, mkdirSync } from 'fs'
+import { join } from 'path'
+import winston from 'winston'
+import winstonDaily from 'winston-daily-rotate-file'
+import { LOG_DIR } from '@config'
+import { HttpException } from '@exceptions/httpException'
 
 // logs dir
-const logDir: string = join(__dirname, LOG_DIR);
+const logDir: string = join(__dirname, LOG_DIR)
 
 if (!existsSync(logDir)) {
-  mkdirSync(logDir);
+  mkdirSync(logDir)
 }
 
 // Define log format
-const logFormat = winston.format.printf(({ timestamp, level, message }) => `${timestamp} ${level}: ${message}`);
+const logFormat = winston.format.printf(({ timestamp, level, message }) => `${timestamp} ${level}: ${message}`)
 
 /*
  * Log Level
@@ -49,29 +49,29 @@ export const logger = winston.createLogger({
       zippedArchive: true,
     }),
   ],
-});
+})
 
 logger.add(
   new winston.transports.Console({
     format: winston.format.combine(winston.format.splat(), winston.format.colorize()),
   }),
-);
+)
 
 export const responseLogger = request => {
-  const { query } = request.request;
-  logger.info(query);
-};
+  const { query } = request.request
+  logger.info(query)
+}
 
 export const errorLogger = error => {
-  const { validationErrors } = error.extensions.exception;
+  const { validationErrors } = error.extensions.exception
 
-  let message = '';
+  let message = ''
   if (validationErrors) {
-    message = validationErrors.map(error => Object.values(error.constraints)).join(', ');
+    message = validationErrors.map(error => Object.values(error.constraints)).join(', ')
   } else {
-    message = error.message;
+    message = error.message
   }
 
-  logger.error(message);
-  throw new HttpException(400, message);
-};
+  logger.error(message)
+  throw new HttpException(400, message)
+}
