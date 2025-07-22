@@ -14,7 +14,7 @@ import { AuthMiddleware, AuthCheckerMiddleware } from '@middlewares/auth.middlew
 import { ErrorMiddleware } from '@middlewares/error.middleware'
 import { logger, responseLogger, errorLogger } from '@utils/logger'
 
-// Global error handlers
+// Global error handler
 process.on('uncaughtException', (error) => {
   console.log(error);
   process.exit(1);
