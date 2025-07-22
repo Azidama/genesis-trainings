@@ -14,6 +14,12 @@ import { AuthMiddleware, AuthCheckerMiddleware } from '@middlewares/auth.middlew
 import { ErrorMiddleware } from '@middlewares/error.middleware'
 import { logger, responseLogger, errorLogger } from '@utils/logger'
 
+// Global error handler
+process.on('uncaughtException', (error) => {
+  console.log(error);
+  process.exit(1);
+});
+
 export class App {
   public app: express.Application
   public env: string

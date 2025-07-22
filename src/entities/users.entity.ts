@@ -1,11 +1,19 @@
-import { IsNotEmpty } from 'class-validator'
+import { IsNotEmpty, IsOptional } from 'class-validator'
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-import { User } from '@interfaces/users.interface'
+import { User, UserRole } from '@interfaces/users.interface'
 
 @Entity()
 export class UserEntity extends BaseEntity implements User {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string
+
+  @Column()
+  @IsOptional()
+  firstName: string
+
+  @Column()
+  @IsOptional()
+  lastName: string
 
   @Column()
   @IsNotEmpty()
@@ -15,6 +23,13 @@ export class UserEntity extends BaseEntity implements User {
   @Column()
   @IsNotEmpty()
   password: string
+
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.STUDENT
+  })
+  role: UserRole
 
   @Column()
   @CreateDateColumn()
