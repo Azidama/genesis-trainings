@@ -30,7 +30,7 @@ export class UserRepository {
     return createUserData
   }
 
-  public async userUpdate(userId: number, userData: UpdateUserDto): Promise<User> {
+  public async userUpdate(userId: string, userData: UpdateUserDto): Promise<User> {
     const findUser: User = await UserEntity.findOne({ where: { id: userId } })
     if (!findUser) throw new HttpException(409, "User doesn't exist")
 
@@ -41,7 +41,7 @@ export class UserRepository {
     return updateUser
   }
 
-  public async userDelete(userId: number): Promise<User> {
+  public async userDelete(userId: string): Promise<User> {
     const findUser: User = await UserEntity.findOne({ where: { id: userId } })
     if (!findUser) throw new HttpException(409, "User doesn't exist")
 

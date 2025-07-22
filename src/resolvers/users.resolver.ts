@@ -32,7 +32,7 @@ export class UserResolver extends UserRepository {
   @Mutation(() => User, {
     description: 'User update',
   })
-  async updateUser(@Arg('userId') userId: number, @Arg('userData') userData: UpdateUserDto): Promise<User> {
+  async updateUser(@Arg('userId') userId: string, @Arg('userData') userData: UpdateUserDto): Promise<User> {
     const user: User = await this.userUpdate(userId, userData)
     return user
   }
@@ -40,7 +40,7 @@ export class UserResolver extends UserRepository {
   @Mutation(() => User, {
     description: 'User delete',
   })
-  async deleteUser(@Arg('userId') userId: number): Promise<User> {
+  async deleteUser(@Arg('userId') userId: string): Promise<User> {
     const user: User = await this.userDelete(userId)
     return user
   }

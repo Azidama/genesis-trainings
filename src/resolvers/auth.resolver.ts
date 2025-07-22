@@ -13,12 +13,12 @@ export class AuthResolver extends AuthRepository {
     return user
   }
 
-  @Mutation(() => User, {
+  @Mutation(() => String, {
     description: 'User login',
   })
-  async login(@Arg('userData') userData: CreateUserDto): Promise<User> {
-    const { findUser } = await this.userLogIn(userData)
-    return findUser
+  async login(@Arg('userData') userData: CreateUserDto): Promise<String> {
+    const { findUser, cookie } = await this.userLogIn(userData)
+    return cookie
   }
 
   @Authorized()

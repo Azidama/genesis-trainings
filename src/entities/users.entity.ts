@@ -4,8 +4,8 @@ import { User } from '@interfaces/users.interface'
 
 @Entity()
 export class UserEntity extends BaseEntity implements User {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn("uuid")
+  id: string
 
   @Column()
   @IsNotEmpty()
