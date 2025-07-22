@@ -1,5 +1,5 @@
 import { Authorized, Arg, Ctx, Mutation, Resolver } from 'type-graphql'
-import { CreateUserDto } from '@dtos/users.dto'
+import { CreateUserDto, LoginUserDto } from '@dtos/users.dto'
 import { AuthRepository } from '@repositories/auth.repository'
 import { User } from '@typedefs/users.type'
 
@@ -16,7 +16,7 @@ export class AuthResolver extends AuthRepository {
   @Mutation(() => String, {
     description: 'User login',
   })
-  async login(@Arg('userData') userData: CreateUserDto): Promise<String> {
+  async login(@Arg('userData') userData: LoginUserDto): Promise<String> {
     const { findUser, cookie } = await this.userLogIn(userData)
     return cookie
   }

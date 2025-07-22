@@ -45,3 +45,18 @@ export class UpdateUserDto implements Partial<User> {
   @IsOptional()
   lastName: string
 }
+
+@InputType()
+export class LoginUserDto implements Partial<User> {
+  @Field()
+  @IsEmail()
+  email: string
+
+  @Field()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(9)
+  @MaxLength(32)
+  password: string
+
+}

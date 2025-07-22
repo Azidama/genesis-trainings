@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional } from 'class-validator'
+import { IsNotEmpty } from 'class-validator'
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 import { User, UserRole } from '@interfaces/users.interface'
 
@@ -8,11 +8,9 @@ export class UserEntity extends BaseEntity implements User {
   id: string
 
   @Column()
-  @IsOptional()
   firstName: string
 
   @Column()
-  @IsOptional()
   lastName: string
 
   @Column()

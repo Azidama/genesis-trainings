@@ -13,7 +13,7 @@ export class UserRepository {
     return users
   }
 
-  public async userFindById(userId: number): Promise<User> {
+  public async userFindById(userId: string): Promise<User> {
     const user: User = await UserEntity.findOne({ where: { id: userId } })
     if (!user) throw new HttpException(409, "User doesn't exist")
 
