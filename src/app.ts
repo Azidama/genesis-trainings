@@ -89,7 +89,7 @@ export class App {
         }
       },
       formatResponse: (response, request) => {
-        responseLogger(request)
+        // responseLogger(request)
 
         return response
       },

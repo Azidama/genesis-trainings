@@ -2,7 +2,7 @@ import { hash, compare } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 import { EntityRepository } from 'typeorm'
 import { SECRET_KEY } from '@config'
-import { CreateUserDto } from '@dtos/users.dto'
+import { CreateUserDto, LoginUserDto } from '@dtos/users.dto'
 import { UserEntity } from '@entities/users.entity'
 import { HttpException } from '@exceptions/httpException'
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface'
@@ -31,7 +31,7 @@ export class AuthRepository {
     return createUserData
   }
 
-  public async userLogIn(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {
+  public async userLogIn(userData: LoginUserDto): Promise<{ cookie: string; findUser: User }> {
     const findUser: User = await UserEntity.findOne({ where: { email: userData.email } })
     if (!findUser) throw new HttpException(409, `This email ${userData.email} was not found`)
 
@@ -44,7 +44,7 @@ export class AuthRepository {
     return { cookie, findUser }
   }
 
-  public async userLogOut(userId: number): Promise<User> {
+  public async userLogOut(userId: string): Promise<User> {
     const findUser: User = await UserEntity.findOne({ where: { id: userId } })
     if (!findUser) throw new HttpException(409, "User doesn't exist")
 

@@ -13,7 +13,7 @@ export class UserRepository {
     return users
   }
 
-  public async userFindById(userId: number): Promise<User> {
+  public async userFindById(userId: string): Promise<User> {
     const user: User = await UserEntity.findOne({ where: { id: userId } })
     if (!user) throw new HttpException(409, "User doesn't exist")
 
@@ -34,8 +34,11 @@ export class UserRepository {
     const findUser: User = await UserEntity.findOne({ where: { id: userId } })
     if (!findUser) throw new HttpException(409, "User doesn't exist")
 
-    const hashedPassword = await hash(userData.password, 10)
-    await UserEntity.update(userId, { ...userData, password: hashedPassword })
+    if (userData.password){
+      const hashedPassword = await hash(userData.password, 10)
+      userData.password = hashedPassword
+    }
+    await UserEntity.update(userId, { ...userData })
 
     const updateUser: User = await UserEntity.findOne({ where: { id: userId } })
     return updateUser

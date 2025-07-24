@@ -16,7 +16,7 @@ export class UserResolver extends UserRepository {
   @Query(() => User, {
     description: 'User find by id',
   })
-  async getUserById(@Arg('userId') userId: number): Promise<User> {
+  async getUserById(@Arg('userId') userId: string): Promise<User> {
     const user: User = await this.userFindById(userId)
     return user
   }

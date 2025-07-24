@@ -15,20 +15,18 @@ export class CreateUserDto implements Partial<User> {
   @MaxLength(32)
   password: string
 
-  @Field({ nullable: true })
+  @Field()
   @IsString()
-  @IsOptional()
   firstName: string
 
-  @Field({ nullable: true })
+  @Field()
   @IsString()
-  @IsOptional()
   lastName: string
 }
 
 @InputType()
 export class UpdateUserDto implements Partial<User> {
-  @Field()
+  @Field({ nullable: true })
   @IsString()
   @IsNotEmpty()
   @MinLength(9)
@@ -37,11 +35,24 @@ export class UpdateUserDto implements Partial<User> {
 
   @Field({ nullable: true })
   @IsString()
-  @IsOptional()
   firstName: string
 
   @Field({ nullable: true })
   @IsString()
-  @IsOptional()
   lastName: string
+}
+
+@InputType()
+export class LoginUserDto implements Partial<User> {
+  @Field()
+  @IsEmail()
+  email: string
+
+  @Field()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(9)
+  @MaxLength(32)
+  password: string
+
 }
