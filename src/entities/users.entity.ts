@@ -1,6 +1,8 @@
 import { IsNotEmpty } from 'class-validator'
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToOne, ManyToMany } from 'typeorm'
 import { User, UserRole } from '@interfaces/users.interface'
+import { CourseEntity } from './courses.entity'
+import { AssignmentEntity } from './assignments.entity'
 
 @Entity()
 export class UserEntity extends BaseEntity implements User {
@@ -36,4 +38,10 @@ export class UserEntity extends BaseEntity implements User {
   @Column()
   @UpdateDateColumn()
   updatedAt: Date
+
+  @ManyToMany(() => CourseEntity, (course) => course.id)
+  course: CourseEntity
+
+  @ManyToMany(() => AssignmentEntity, (assignment) => assignment.id)
+  assignment: AssignmentEntity
 }

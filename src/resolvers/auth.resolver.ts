@@ -16,8 +16,8 @@ export class AuthResolver extends AuthRepository {
   @Mutation(() => String, {
     description: 'User login',
   })
-  async login(@Arg('userData') userData: LoginUserDto): Promise<String> {
-    const { findUser, cookie } = await this.userLogIn(userData)
+  async login(@Arg('userData') userData: LoginUserDto): Promise<string> {
+    const cookie = await this.userLogIn(userData)
     return cookie
   }
 
