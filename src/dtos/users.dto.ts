@@ -1,4 +1,4 @@
-import { IsEmail, IsString, IsNotEmpty, MinLength, MaxLength, IsOptional } from 'class-validator'
+import { IsEmail, IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator'
 import { InputType, Field } from 'type-graphql'
 import { User } from '@typedefs/users.type'
 
@@ -54,5 +54,4 @@ export class LoginUserDto implements Partial<User> {
   @MinLength(9)
   @MaxLength(32)
   password: string
-
 }

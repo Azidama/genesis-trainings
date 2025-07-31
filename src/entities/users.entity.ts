@@ -1,8 +1,8 @@
 import { IsNotEmpty } from 'class-validator'
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToOne, ManyToMany } from 'typeorm'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm'
 import { User, UserRole } from '@interfaces/users.interface'
-import { CourseEntity } from './courses.entity'
-import { AssignmentEntity } from './assignments.entity'
+import { EnrollmentEntity } from './enrollment.entity'
+import { SubmissionEntity } from './submissions.entity'
 
 @Entity()
 export class UserEntity extends BaseEntity implements User {
@@ -27,7 +27,7 @@ export class UserEntity extends BaseEntity implements User {
   @Column({
     type: 'enum',
     enum: UserRole,
-    default: UserRole.STUDENT
+    default: UserRole.STUDENT,
   })
   role: UserRole
 
@@ -39,9 +39,9 @@ export class UserEntity extends BaseEntity implements User {
   @UpdateDateColumn()
   updatedAt: Date
 
-  @ManyToMany(() => CourseEntity, (course) => course.id)
-  course: CourseEntity
+  @OneToMany(() => EnrollmentEntity, enrollment => enrollment.student)
+  enrollments: EnrollmentEntity[]
 
-  @ManyToMany(() => AssignmentEntity, (assignment) => assignment.id)
-  assignment: AssignmentEntity
+  @OneToMany(() => SubmissionEntity, submission => submission.student)
+  submissions: SubmissionEntity[]
 }

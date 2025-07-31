@@ -1,8 +1,7 @@
-import { IsNotEmpty } from 'class-validator'
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToOne, ManyToMany, ManyToOne } from 'typeorm'
-import { UserEntity } from './users.entity'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm'
 import { Assignment } from '@/interfaces/assignments.interface'
 import { CourseEntity } from './courses.entity'
+import { SubmissionEntity } from './submissions.entity'
 
 @Entity()
 export class AssignmentEntity extends BaseEntity implements Assignment {
@@ -10,17 +9,19 @@ export class AssignmentEntity extends BaseEntity implements Assignment {
   id: string
 
   @Column()
-  name: string
+  title: string
 
-  @Column()
-  @CreateDateColumn()
-  createdAt: Date
+  @Column('text')
+  description: string
 
-  @Column()
-  @UpdateDateColumn()
-  updatedAt: Date
+  @Column({ type: 'timestamp', nullable: true })
+  dueDate: Date
 
-  @ManyToOne(() => CourseEntity, (course) => course.id)
+  @ManyToOne(() => CourseEntity, course => course.assignments,
+  { onDelete: 'CASCADE' }
+)
   course: CourseEntity
 
+  @OneToMany(() => SubmissionEntity, submission => submission.assignment)
+  submissions: SubmissionEntity[]
 }
