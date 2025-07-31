@@ -34,7 +34,7 @@ export class UserRepository {
     const findUser: User = await UserEntity.findOne({ where: { id: userId } })
     if (!findUser) throw new HttpException(409, "User doesn't exist")
 
-    if (userData.password){
+    if (userData.password) {
       const hashedPassword = await hash(userData.password, 10)
       userData.password = hashedPassword
     }
