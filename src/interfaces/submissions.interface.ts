@@ -1,3 +1,6 @@
 export interface Submission {
-  id?: string
+  id: string
+  content?: string
+  submittedAt?: Date
+  grade?: number
 }

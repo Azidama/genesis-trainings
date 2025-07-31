@@ -1,3 +1,5 @@
 export interface Course {
-  id?: number
+  id: number
+  title: string
+  code: string
 }

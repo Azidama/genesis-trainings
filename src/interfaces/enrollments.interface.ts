@@ -1,3 +1,5 @@
 export interface Enrollment {
-  id?: number
+  id: number
+  enrolledAt?: Date
+  isActive?: boolean
 }

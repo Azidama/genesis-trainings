@@ -1,8 +1,9 @@
 import { IsNotEmpty } from 'class-validator'
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm'
 import { User, UserRole } from '@interfaces/users.interface'
 import { EnrollmentEntity } from './enrollment.entity'
 import { SubmissionEntity } from './submissions.entity'
+import { BatchEntity } from './batches.entity'
 
 @Entity()
 export class UserEntity extends BaseEntity implements User {
@@ -44,4 +45,9 @@ export class UserEntity extends BaseEntity implements User {
 
   @OneToMany(() => SubmissionEntity, submission => submission.student)
   submissions: SubmissionEntity[]
+
+  @ManyToOne(() => BatchEntity, batch => batch.students, {
+    onDelete: 'SET NULL',
+  })
+  batch: BatchEntity;
 }

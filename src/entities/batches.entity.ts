@@ -1,4 +1,4 @@
-import { BaseEntity, Entity, OneToOne, PrimaryColumn } from 'typeorm'
+import { BaseEntity, Entity, OneToMany, PrimaryColumn } from 'typeorm'
 import { Batch, BatchSession } from '@/interfaces/batches.interface'
 import { UserEntity } from './users.entity'
 
@@ -13,6 +13,6 @@ export class BatchEntity extends BaseEntity implements Batch {
   })
   id: string
 
-  @OneToOne(() => UserEntity, user => user.id, { nullable: true })
-  user: UserEntity
+  @OneToMany(() => UserEntity, student => student.batch)
+  students: UserEntity[];
 }
