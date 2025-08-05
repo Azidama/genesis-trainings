@@ -19,15 +19,15 @@ export class CourseRepository {
   }
 
   // TODO: fix DTOs and types
-  public async courseCreate(courseData: any): Promise<Course> {
-    const findCourse: Course = await CourseEntity.findOne({ where: { id: courseData.id } })
-    if (findCourse) throw new HttpException(409, `This Course ${courseData.code} already exists`)
+  // public async courseCreate(courseData: any): Promise<Course> {
+  //   const findCourse: Course = await CourseEntity.findOne({ where: { id: courseData.id } })
+  //   if (findCourse) throw new HttpException(409, `This Course ${courseData.code} already exists`)
 
-    const createCourseData: Course = await CourseEntity.create({ ...courseData })
-    // .save()
+  //   const createCourseData: Course = await CourseEntity.create({ ...courseData })
+  //   // .save()
 
-    return createCourseData
-  }
+  //   return createCourseData
+  // }
 
   public async courseUpdate(courseId: string, courseData: any): Promise<Course> {
     const findCourse: Course = await CourseEntity.findOne({ where: { id: courseId } })
