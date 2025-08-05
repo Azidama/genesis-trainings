@@ -9,8 +9,12 @@ import { DataStoredInToken, TokenData } from '@interfaces/auth.interface'
 import { User } from '@interfaces/users.interface'
 
 const createToken = (user: User): TokenData => {
-  const dataStoredInToken: DataStoredInToken = { id: user.id }
-  const expiresIn: number = 60 * 60
+  const dataStoredInToken: DataStoredInToken = { 
+    id: user.id, 
+    email: user.email, 
+    name: `${user.firstName} + ${user.lastName}` 
+  }
+  const expiresIn: number = 60 * 60 * 24
 
   return { expiresIn, token: sign(dataStoredInToken, SECRET_KEY, { expiresIn }) }
 }
