@@ -1,16 +1,16 @@
 import { Field, ObjectType } from 'type-graphql'
 
 @ObjectType()
-export class User {
+export class Course {
   @Field()
-  id: string
+  id: number
 
   @Field()
-  email: string
+  code: string
 
   @Field({ nullable: true })
-  firstName?: string
+  title: string
 
   @Field({ nullable: true })
-  lastName?: string
+  description: string
 }

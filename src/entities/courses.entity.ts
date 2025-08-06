@@ -14,6 +14,9 @@ export class CourseEntity extends BaseEntity implements Course {
   @Column()
   code: string
 
+  @Column({ nullable: true })
+  description: string
+
   @OneToMany(() => AssignmentEntity, enrollment => enrollment.course)
   enrollments: EnrollmentEntity[]
 
