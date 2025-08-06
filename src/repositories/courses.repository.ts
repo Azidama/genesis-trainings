@@ -2,6 +2,7 @@ import { EntityRepository } from 'typeorm'
 import { CourseEntity } from '@/entities/courses.entity'
 import { HttpException } from '@exceptions/httpException'
 import { Course } from '@/interfaces/courses.interface'
+import { CreateCourseDto } from '@/dtos/courses.dto'
 
 @EntityRepository(CourseEntity)
 export class CourseRepository {
@@ -19,15 +20,32 @@ export class CourseRepository {
   }
 
   // TODO: fix DTOs and types
-  // public async courseCreate(courseData: any): Promise<Course> {
-  //   const findCourse: Course = await CourseEntity.findOne({ where: { id: courseData.id } })
-  //   if (findCourse) throw new HttpException(409, `This Course ${courseData.code} already exists`)
+  public async courseCreate(courseData: CreateCourseDto): Promise<Course> {
+    const findCourse: Course = await CourseEntity.findOne({ where: { code: courseData.code } })
+    if (findCourse) throw new HttpException(409, `This Course ${courseData.code} already exists`)
 
-  //   const createCourseData: Course = await CourseEntity.create({ ...courseData })
-  //   // .save()
+    const createCourseData: Course = await CourseEntity.create({ ...courseData }).save()
 
-  //   return createCourseData
-  // }
+    return createCourseData
+  }
+
+  public async createManyCourses(coursesData: CreateCourseDto[]): Promise<Course[]> {
+    const createdCourses: Course[] = []
+    
+    for (const courseData of coursesData) {
+      try {
+        const course = await this.courseCreate(courseData);
+        createdCourses.push(course)
+      } catch (error) {
+        if (error instanceof HttpException && error.status === 409) {
+          continue;
+        }
+        throw error
+      }
+    }
+    
+    return createdCourses
+  }
 
   public async courseUpdate(courseId: string, courseData: any): Promise<Course> {
     const findCourse: Course = await CourseEntity.findOne({ where: { id: courseId } })
