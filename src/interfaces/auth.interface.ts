@@ -1,9 +1,7 @@
 import { User } from '@interfaces/users.interface'
 
 export interface DataStoredInToken {
-  id: string
-  email?: string
-  name?: string
+  user: User
 }
 
 export interface TokenData {

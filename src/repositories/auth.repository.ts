@@ -10,9 +10,7 @@ import { User } from '@interfaces/users.interface'
 
 const createToken = (user: User): TokenData => {
   const dataStoredInToken: DataStoredInToken = { 
-    id: user.id, 
-    email: user.email, 
-    name: `${user.firstName} + ${user.lastName}` 
+    user
   }
   const expiresIn: number = 60 * 60 * 24
 
