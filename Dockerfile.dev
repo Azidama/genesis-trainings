@@ -1,13 +1,16 @@
 # NodeJS Version 16
 FROM node:16.18-buster-slim
 
-# Copy Dir
-COPY . ./app
+# Copy Dir // comment this out and add copy packagejson
+# to mount the app directory directly
+# so nodemon works with docker
+# COPY . ./app
 
 # Work to Dir
 WORKDIR /app
 
 # Install Node Package
+COPY package*.json ./
 RUN npm install --legacy-peer-deps
 
 # Set Env

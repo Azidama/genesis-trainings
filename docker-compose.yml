@@ -1,4 +1,4 @@
-version: "3.9"
+# version: "3.9"
 
 services:
   proxy:
@@ -26,7 +26,8 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_DB: dev
     volumes:
-      - ./:/app
+      - .:/app
+      # - ./:/app
       - /app/node_modules
     restart: "unless-stopped"
     networks:
