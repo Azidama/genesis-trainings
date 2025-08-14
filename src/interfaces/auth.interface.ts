@@ -1,7 +1,7 @@
-import { User } from '@interfaces/users.interface'
+import { UserInfo } from '@interfaces/users.interface'
 
 export interface DataStoredInToken {
-  user: User
+  user: UserInfo
 }
 
 export interface TokenData {
@@ -10,5 +10,5 @@ export interface TokenData {
 }
 
 export interface RequestWithUser {
-  user: User
+  user: UserInfo
 }

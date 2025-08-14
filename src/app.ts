@@ -60,7 +60,10 @@ export class App {
       this.app.use(helmet())
     }
 
-    this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }))
+    const allowedOriginsString = ORIGIN
+
+    const allowedOrigins = allowedOriginsString ? allowedOriginsString.split(',').map(origin => origin.trim()) : []
+    this.app.use(cors({ origin: allowedOrigins, credentials: CREDENTIALS }))
     this.app.use(compression())
     this.app.use(express.json())
     this.app.use(express.urlencoded({ extended: true }))
@@ -80,10 +83,10 @@ export class App {
           ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
           : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
       ],
-      context: async ({ req }) => {
+      context: async ({ req, res }) => {
         try {
           const user = await AuthMiddleware(req)
-          return { user }
+          return { req, res, user }
         } catch (error) {
           throw new Error(error)
         }

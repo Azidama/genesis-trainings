@@ -6,6 +6,13 @@ export interface User {
   lastName?: string
 }
 
+export interface UserInfo {
+  id: string
+  email: string
+  firstName?: string
+  lastName?: string
+}
+
 export enum UserRole {
   STUDENT = 'student',
   TEACHER = 'teacher',

@@ -6,19 +6,21 @@ import { CreateUserDto, LoginUserDto } from '@dtos/users.dto'
 import { UserEntity } from '@entities/users.entity'
 import { HttpException } from '@exceptions/httpException'
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface'
-import { User } from '@interfaces/users.interface'
+import { User, UserInfo } from '@interfaces/users.interface'
+import { Response } from 'express'
 
-const createToken = (user: User): TokenData => {
-  const dataStoredInToken: DataStoredInToken = { 
+const expiresIn: number = 86400 * 1000
+const createToken = (user: UserInfo): String => {
+  const dataStoredInToken: DataStoredInToken = {
     user
   }
-  const expiresIn: number = 60 * 60 * 24
 
-  return { expiresIn, token: sign(dataStoredInToken, SECRET_KEY, { expiresIn }) }
+  return sign(dataStoredInToken, SECRET_KEY, { expiresIn })
 }
 
+// old cookie code, might bring it back if needed
 const createCookie = (tokenData: TokenData): string => {
-  return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`
+  return `Authorization=${tokenData.token}; sameSite: 'None'; httpOnly; Max-Age=${tokenData.expiresIn};`
 }
 
 @EntityRepository(UserEntity)
@@ -33,17 +35,28 @@ export class AuthRepository {
     return createUserData
   }
 
-  public async userLogIn(userData: LoginUserDto): Promise<string> {
+  public async userLogIn(userData: LoginUserDto, res: Response): Promise<Boolean> {
     const findUser: User = await UserEntity.findOne({ where: { email: userData.email } })
     if (!findUser) throw new HttpException(409, `This email ${userData.email} was not found`)
 
     const isPasswordMatching: boolean = await compare(userData.password, findUser.password)
     if (!isPasswordMatching) throw new HttpException(409, 'Password is not matching')
 
-    const tokenData = createToken(findUser)
-    const cookie = createCookie(tokenData)
+    const user = {
+      id: findUser.id,
+      email: findUser.email,
+      firstName: findUser.firstName,
+      lastName: findUser.lastName,
+    }
+    const token = createToken(user)
+    res.cookie('Authorization', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: expiresIn,
+    })
 
-    return cookie
+    return true
   }
 
   public async userLogOut(userId: string): Promise<User> {
