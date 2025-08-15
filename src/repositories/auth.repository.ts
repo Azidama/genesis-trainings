@@ -2,7 +2,7 @@ import { hash, compare } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 import { EntityRepository } from 'typeorm'
 import { SECRET_KEY } from '@config'
-import { CreateUserDto, LoginUserDto } from '@dtos/users.dto'
+import { LoginUserDto } from '@dtos/users.dto'
 import { UserEntity } from '@entities/users.entity'
 import { HttpException } from '@exceptions/HttpException'
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface'
@@ -25,16 +25,6 @@ const createCookie = (tokenData: TokenData): string => {
 
 @EntityRepository(UserEntity)
 export class AuthRepository {
-  public async userSignUp(userData: CreateUserDto): Promise<User> {
-    const findUser: User = await UserEntity.findOne({ where: { email: userData.email } })
-    if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`)
-
-    const hashedPassword = await hash(userData.password, 10)
-    const createUserData: User = await UserEntity.create({ ...userData, password: hashedPassword }).save()
-
-    return createUserData
-  }
-
   public async userLogIn(userData: LoginUserDto, res: Response): Promise<Boolean> {
     const findUser: User = await UserEntity.findOne({ where: { email: userData.email } })
     if (!findUser) throw new HttpException(409, `This email ${userData.email} was not found`)
