@@ -3,8 +3,8 @@ import { AuthChecker } from 'type-graphql'
 import { getRepository } from 'typeorm'
 import { SECRET_KEY } from '@config'
 import { UserEntity } from '@entities/users.entity'
-import { HttpException } from '@exceptions/HttpException'
 import { RequestWithUser, DataStoredInToken } from '@interfaces/auth.interface'
+import { AuthenticationError } from 'apollo-server-core'
 
 const getAuthorization = req => {
   const cookie = req.cookies['Authorization']
@@ -30,13 +30,13 @@ export const AuthMiddleware = async req => {
 
     return null
   } catch (error) {
-    throw new HttpException(401, 'Unauthorized')
+    throw new AuthenticationError('UNAUTHENTICATED')
   }
 }
 
 export const AuthCheckerMiddleware: AuthChecker<RequestWithUser> = async ({ context: { user } }) => {
   if (!user) {
-    throw new HttpException(401, 'Unauthorized')
+    throw new AuthenticationError('UNAUTHENTICATED')
   }
 
   return true

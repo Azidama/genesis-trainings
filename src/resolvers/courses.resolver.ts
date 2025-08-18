@@ -14,6 +14,7 @@ export class CourseResolver extends CourseRepository {
     return courses
   }
 
+  @Authorized()
   @Mutation(() => [Course], {
     description: 'Create many Courses',
   })
