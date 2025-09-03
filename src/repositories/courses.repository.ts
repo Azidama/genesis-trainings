@@ -1,6 +1,6 @@
 import { EntityRepository } from 'typeorm'
 import { CourseEntity } from '@/entities/courses.entity'
-import { HttpException } from '@exceptions/httpException'
+import { HttpException } from '@exceptions/HttpException'
 import { Course } from '@/interfaces/courses.interface'
 import { CreateCourseDto } from '@/dtos/courses.dto'
 
@@ -19,7 +19,7 @@ export class CourseRepository {
     return course
   }
 
-  // TODO: fix DTOs and types
+  // TODO: fix DTOs and update query
   public async courseCreate(courseData: CreateCourseDto): Promise<Course> {
     const findCourse: Course = await CourseEntity.findOne({ where: { code: courseData.code } })
     if (findCourse) throw new HttpException(409, `This Course ${courseData.code} already exists`)

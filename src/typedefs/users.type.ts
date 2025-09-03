@@ -1,3 +1,4 @@
+import { UserRole } from '@/interfaces/users.interface'
 import { Field, ObjectType } from 'type-graphql'
 
 @ObjectType()
@@ -13,4 +14,8 @@ export class User {
 
   @Field({ nullable: true })
   lastName?: string
+
+  @Field(() => UserRole, { nullable: true })
+  role?: UserRole
+
 }

@@ -101,7 +101,7 @@ export class App {
           errorLogger(error)
           return error
         } catch (err) {
-          return new Error(err)
+          return error
         }
       },
     })

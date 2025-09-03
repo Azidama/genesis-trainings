@@ -1,5 +1,5 @@
 export interface Batch {
-  id: string
+  batchId: string
 }
 
 export enum BatchSession {

@@ -3,8 +3,8 @@ import { AuthChecker } from 'type-graphql'
 import { getRepository } from 'typeorm'
 import { SECRET_KEY } from '@config'
 import { UserEntity } from '@entities/users.entity'
-import { HttpException } from '@exceptions/httpException'
 import { RequestWithUser, DataStoredInToken } from '@interfaces/auth.interface'
+import { AuthenticationError } from 'apollo-server-core'
 
 const getAuthorization = req => {
   const cookie = req.cookies['Authorization']
@@ -21,21 +21,22 @@ export const AuthMiddleware = async req => {
     const Authorization = getAuthorization(req)
 
     if (Authorization) {
-      const { id } = verify(Authorization, SECRET_KEY) as DataStoredInToken
+      const { user } = verify(Authorization, SECRET_KEY) as DataStoredInToken
+      const id = user.id
       const userRepository = getRepository(UserEntity)
-      const findUser = await userRepository.findOne(id, { select: ['id', 'email', 'password'] })
+      const findUser = await userRepository.findOne(id, { select: ['id', 'email'] })
       return findUser
     }
 
     return null
   } catch (error) {
-    throw new HttpException(401, 'Wrong authentication token')
+    throw new AuthenticationError('UNAUTHENTICATED')
   }
 }
 
 export const AuthCheckerMiddleware: AuthChecker<RequestWithUser> = async ({ context: { user } }) => {
   if (!user) {
-    throw new HttpException(404, 'Authentication token missing')
+    throw new AuthenticationError('UNAUTHENTICATED')
   }
 
   return true

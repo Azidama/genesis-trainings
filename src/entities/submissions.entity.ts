@@ -1,9 +1,10 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique } from 'typeorm'
 import { UserEntity } from './users.entity'
 import { AssignmentEntity } from './assignments.entity'
 import { Submission } from '@/interfaces/submissions.interface'
 
 @Entity()
+@Unique(['student', 'assignment'])
 export class SubmissionEntity extends BaseEntity implements Submission {
   @PrimaryGeneratedColumn('uuid')
   id: string

@@ -1,9 +1,10 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique } from 'typeorm'
 import { CourseEntity } from './courses.entity'
 import { UserEntity } from './users.entity'
 import { Enrollment } from '@/interfaces/enrollments.interface'
 
 @Entity()
+@Unique(['student', 'course'])
 export class EnrollmentEntity extends BaseEntity implements Enrollment {
   @PrimaryGeneratedColumn()
   id: number
