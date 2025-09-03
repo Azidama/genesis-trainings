@@ -1,36 +1,45 @@
 import { IsNotEmpty } from 'class-validator'
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
 import { User, UserRole } from '@interfaces/users.interface'
 import { EnrollmentEntity } from './enrollment.entity'
 import { SubmissionEntity } from './submissions.entity'
 import { BatchEntity } from './batches.entity'
+import { CourseMode } from '@/interfaces/courses.interface'
 
 @Entity()
 export class UserEntity extends BaseEntity implements User {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Column()
-  firstName: string
-
-  @Column()
-  lastName: string
-
-  @Column()
+  @Column({ unique: true })
   @IsNotEmpty()
-  @Unique(['email'])
   email: string
 
   @Column()
-  @IsNotEmpty()
-  password: string
+  name: string
 
+  @Column()
+  fatherName: string
+
+  @Column({ nullable: true })
+  phoneNumber: string
+  
   @Column({
     type: 'enum',
     enum: UserRole,
     default: UserRole.STUDENT,
   })
   role: UserRole
+
+  @Column()
+  password: string
+
+  @Column({
+    type: 'enum',
+    enum: CourseMode,
+    nullable: true
+  })
+  trainingMode: CourseMode
 
   @Column()
   @CreateDateColumn()
@@ -40,14 +49,18 @@ export class UserEntity extends BaseEntity implements User {
   @UpdateDateColumn()
   updatedAt: Date
 
-  @OneToMany(() => EnrollmentEntity, enrollment => enrollment.student)
+  @OneToMany(() => EnrollmentEntity, enrollment => enrollment.student, { nullable: true })
   enrollments: EnrollmentEntity[]
 
-  @OneToMany(() => SubmissionEntity, submission => submission.student)
+  @OneToMany(() => SubmissionEntity, submission => submission.student, { nullable: true })
   submissions: SubmissionEntity[]
 
-  @ManyToOne(() => BatchEntity, batch => batch.students, {
-    onDelete: 'SET NULL',
-  })
+  @ManyToOne(() => BatchEntity, batch => batch.student)
+  @JoinColumn({ name: 'batchId' })
   batch: BatchEntity;
+
+  @Column({ nullable: true })
+  @Unique(['batchId']) 
+  batchId: string;
+
 }

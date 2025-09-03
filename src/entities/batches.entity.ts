@@ -10,9 +10,10 @@ const batchDateFall = `${BatchSession.BATCH_FALL}-${batchYear}`
 export class BatchEntity extends BaseEntity implements Batch {
   @PrimaryColumn({
     default: batchDateFall,
+    unique: true
   })
-  id: string
+  batchId: string
 
   @OneToMany(() => UserEntity, student => student.batch)
-  students: UserEntity[];
+  student: UserEntity[]
 }
