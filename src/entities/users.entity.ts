@@ -4,7 +4,7 @@ import { User, UserRole } from '@interfaces/users.interface'
 import { EnrollmentEntity } from './enrollment.entity'
 import { SubmissionEntity } from './submissions.entity'
 import { BatchEntity } from './batches.entity'
-import { CourseMode } from '@/interfaces/courses.interface'
+// import { CourseMode } from '@/interfaces/courses.interface'
 
 @Entity()
 export class UserEntity extends BaseEntity implements User {
@@ -22,7 +22,7 @@ export class UserEntity extends BaseEntity implements User {
   fatherName: string
 
   @Column({ nullable: true })
-  phoneNumber: string
+  phone: string
   
   @Column({
     type: 'enum',
@@ -34,12 +34,15 @@ export class UserEntity extends BaseEntity implements User {
   @Column()
   password: string
 
-  @Column({
-    type: 'enum',
-    enum: CourseMode,
-    nullable: true
-  })
-  trainingMode: CourseMode
+  @Column({ nullable: true })
+  trainingMode: string
+
+  // @Column({
+  //   type: 'enum',
+  //   enum: CourseMode,
+  //   nullable: true
+  // })
+  // trainingMode: CourseMode
 
   @Column()
   @CreateDateColumn()

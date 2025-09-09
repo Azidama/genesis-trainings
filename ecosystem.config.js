@@ -21,7 +21,7 @@
       error: './logs/error.log', // pm2 error log file
       env: {
         // environment variable
-        PORT: 3000,
+        PORT: 9000,
         NODE_ENV: 'production',
       },
     },
@@ -41,7 +41,7 @@
       error: './logs/error.log', // pm2 error log file
       env: {
         // environment variable
-        PORT: 3000,
+        PORT: 9000,
         NODE_ENV: 'development',
       },
     },

@@ -1,10 +1,10 @@
 import { IsNotEmpty } from 'class-validator'
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
-import { CourseMode } from '@/interfaces/courses.interface'
-import { Application } from '@/interfaces/applications.interface'
+import { Registration } from '@/interfaces/registrations.interface'
+// import { CourseMode } from '@/interfaces/courses.interface'
 
 @Entity()
-export class ApplicationEntity extends BaseEntity implements Application {
+export class RegistrationEntity extends BaseEntity implements Registration {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
@@ -14,9 +14,12 @@ export class ApplicationEntity extends BaseEntity implements Application {
 
   @Column()
   name: string
+
+  // @Column()
+  // age: Date
   
   @Column()
-  phoneNumber: string
+  phone: string
 
   @Column()
   fatherName: string
@@ -33,12 +36,18 @@ export class ApplicationEntity extends BaseEntity implements Application {
   @Column({ unique: true, nullable: true })
   cnic: string
 
-  @Column({
-    type: 'enum',
-    enum: CourseMode,
-    nullable: true
-  })
-  trainingMode: CourseMode
+  @Column({ nullable: true })
+  trainingMode: string
+
+  // @Column({
+  //   type: 'enum',
+  //   enum: CourseMode,
+  //   nullable: true
+  // })
+  // trainingMode: CourseMode
+
+  @Column('simple-array', { nullable: true })
+  courses: string[]
 
   @Column()
   @CreateDateColumn()
