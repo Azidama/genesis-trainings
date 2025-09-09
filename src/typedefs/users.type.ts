@@ -10,10 +10,7 @@ export class User {
   email: string
 
   @Field({ nullable: true })
-  firstName?: string
-
-  @Field({ nullable: true })
-  lastName?: string
+  name?: string
 
   @Field(() => UserRole, { nullable: true })
   role?: UserRole

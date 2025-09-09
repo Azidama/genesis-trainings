@@ -1,4 +1,4 @@
-import { hash, compare } from 'bcrypt'
+import { compare } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 import { EntityRepository } from 'typeorm'
 import { SECRET_KEY } from '@config'
@@ -35,8 +35,7 @@ export class AuthRepository {
     const user = {
       id: findUser.id,
       email: findUser.email,
-      firstName: findUser.firstName,
-      lastName: findUser.lastName,
+      name: findUser.name
     }
     const token = createToken(user)
     res.cookie('Authorization', token, {
