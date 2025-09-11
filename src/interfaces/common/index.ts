@@ -5,3 +5,10 @@ export interface MyContext {
     res: Response
     user?: any
   }
+
+  
+export enum TrainingMode {
+  ONLINE = 'Online',
+  LAHORE_CAMPUS = 'Lahore Campus',
+  ISLAMABAD_CAMPUS = 'Islamabad Campus',
+}

@@ -1,5 +1,4 @@
 import { Field, ObjectType } from 'type-graphql'
-// import { CourseMode } from '@/interfaces/courses.interface'
 
 @ObjectType()
 export class Registration {
