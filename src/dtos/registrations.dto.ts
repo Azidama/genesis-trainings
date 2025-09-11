@@ -1,11 +1,10 @@
 import { IsEmail, IsString, IsNotEmpty, MinLength, MaxLength, IsEnum, IsOptional, IsArray } from 'class-validator'
 import { InputType, Field } from 'type-graphql'
-import { UserRole } from '@/interfaces/users.interface'
 import { Registration } from '@/interfaces/registrations.interface'
 
 
 @InputType()
-export class CreateRegistrationDto {
+export class CreateRegistrationDto implements Partial<Registration> {
   @Field()
   @IsNotEmpty()
   @IsEmail()
@@ -53,57 +52,3 @@ export class CreateRegistrationDto {
   heardAboutUs?: string;
 }
 
-@InputType()
-export class CreateUserDto implements Partial<Registration> {
-  @Field()
-  @IsEmail()
-  email: string
-
-  @Field()
-  @IsString()
-  firstName: string
-
-  @Field()
-  @IsString()
-  lastName: string
-
-  @Field(() => UserRole, {nullable: true} )
-  @IsEnum(UserRole, { message: 'Role must be admin, teacher, or student' })
-  role: UserRole
-}
-
-// @InputType()
-// export class UpdateUserDto implements Partial<Registration> {
-//   @Field({ nullable: true })
-//   @IsString()
-//   @IsNotEmpty()
-//   @MinLength(9)
-//   @MaxLength(32)
-//   password: string
-
-//   @Field({ nullable: true })
-//   @IsString()
-//   firstName: string
-
-//   @Field({ nullable: true })
-//   @IsString()
-//   lastName: string
-
-//   @Field(() => UserRole, {nullable: true} )
-//   @IsEnum(UserRole, { message: 'Role must be admin, teacher, or student' })
-//   role: UserRole
-// }
-
-@InputType()
-export class LoginUserDto implements Partial<Registration> {
-  @Field()
-  @IsEmail()
-  email: string
-
-  @Field()
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(9)
-  @MaxLength(32)
-  password: string
-}

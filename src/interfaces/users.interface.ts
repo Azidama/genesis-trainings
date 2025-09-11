@@ -1,4 +1,3 @@
-import { registerEnumType } from "type-graphql";
 
 export interface User {
   id: string
@@ -18,8 +17,3 @@ export enum UserRole {
   TEACHER = 'Teacher',
   ADMIN = 'Admin',
 }
-
-registerEnumType(UserRole, {
-  name: "UserRole",
-  description: "The allowed roles for a user", 
-})

@@ -1,7 +1,6 @@
 import { IsNotEmpty } from 'class-validator'
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
 import { Registration } from '@/interfaces/registrations.interface'
-// import { CourseMode } from '@/interfaces/courses.interface'
 
 @Entity()
 export class RegistrationEntity extends BaseEntity implements Registration {
@@ -15,8 +14,8 @@ export class RegistrationEntity extends BaseEntity implements Registration {
   @Column()
   name: string
 
-  // @Column()
-  // age: Date
+  @Column()
+  age: string
   
   @Column()
   phone: string
@@ -38,13 +37,6 @@ export class RegistrationEntity extends BaseEntity implements Registration {
 
   @Column({ nullable: true })
   trainingMode: string
-
-  // @Column({
-  //   type: 'enum',
-  //   enum: CourseMode,
-  //   nullable: true
-  // })
-  // trainingMode: CourseMode
 
   @Column('simple-array', { nullable: true })
   courses: string[]

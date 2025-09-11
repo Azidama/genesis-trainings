@@ -1,7 +1,6 @@
 import { IsEmail, IsString, IsNotEmpty, MinLength, MaxLength, IsEnum } from 'class-validator'
 import { InputType, Field } from 'type-graphql'
 import { User } from '@typedefs/users.type'
-import { UserRole } from '@/interfaces/users.interface'
 
 @InputType()
 export class CreateUserDto implements Partial<User> {
@@ -24,9 +23,9 @@ export class CreateUserDto implements Partial<User> {
   @IsString()
   lastName: string
 
-  @Field(() => UserRole, {nullable: true} )
-  @IsEnum(UserRole, { message: 'Role must be admin, teacher, or student' })
-  role: UserRole
+  @Field({ nullable: true })
+  @IsString()
+  role: string
 }
 
 @InputType()
@@ -46,9 +45,9 @@ export class UpdateUserDto implements Partial<User> {
   @IsString()
   lastName: string
 
-  @Field(() => UserRole, {nullable: true} )
-  @IsEnum(UserRole, { message: 'Role must be admin, teacher, or student' })
-  role: UserRole
+  @Field({ nullable: true })
+  @IsString()
+  role: string
 }
 
 @InputType()

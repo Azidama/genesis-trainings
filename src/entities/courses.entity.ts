@@ -5,7 +5,10 @@ import { EnrollmentEntity } from './enrollment.entity'
 
 @Entity()
 export class CourseEntity extends BaseEntity implements Course {
-  @PrimaryColumn({ unique: true })
+  @PrimaryGeneratedColumn('uuid')
+  id: number
+
+  @Column({ unique: true })
   code: string
 
   @Column()
