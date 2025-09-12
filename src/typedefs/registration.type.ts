@@ -26,8 +26,8 @@ export class Registration {
   @Field()
   phone?: string
 
-  @Field(() => [String], { 
-    nullable: true 
+  @Field(() => [String], {
+    nullable: true,
   })
   courses?: string[]
 

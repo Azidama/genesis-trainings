@@ -12,7 +12,7 @@ import { Response } from 'express'
 const expiresIn: number = 86400 * 1000
 const createToken = (user: UserInfo): String => {
   const dataStoredInToken: DataStoredInToken = {
-    user
+    user,
   }
 
   return sign(dataStoredInToken, SECRET_KEY, { expiresIn })
@@ -35,7 +35,7 @@ export class AuthRepository {
     const user = {
       id: findUser.id,
       email: findUser.email,
-      name: findUser.name
+      name: findUser.name,
     }
     const token = createToken(user)
     res.cookie('Authorization', token, {

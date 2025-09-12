@@ -9,14 +9,10 @@ export class EnrollmentEntity extends BaseEntity implements Enrollment {
   @PrimaryGeneratedColumn()
   id: number
 
-  @ManyToOne(() => UserEntity, student => student.enrollments,
-  { onDelete: 'CASCADE' }
-)
+  @ManyToOne(() => UserEntity, student => student.enrollments, { onDelete: 'CASCADE' })
   student: UserEntity
 
-  @ManyToOne(() => CourseEntity, course => course.enrollments,
-  { onDelete: 'CASCADE' }
-)
+  @ManyToOne(() => CourseEntity, course => course.enrollments, { onDelete: 'CASCADE' })
   course: CourseEntity
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

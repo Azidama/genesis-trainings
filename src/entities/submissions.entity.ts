@@ -18,13 +18,9 @@ export class SubmissionEntity extends BaseEntity implements Submission {
   @Column({ nullable: true })
   grade: number
 
-  @ManyToOne(() => UserEntity, student => student.submissions,
-  { onDelete: 'CASCADE' }
-)
+  @ManyToOne(() => UserEntity, student => student.submissions, { onDelete: 'CASCADE' })
   student: UserEntity
 
-  @ManyToOne(() => AssignmentEntity, assignment => assignment.submissions,
-  { onDelete: 'CASCADE' }
-)
+  @ManyToOne(() => AssignmentEntity, assignment => assignment.submissions, { onDelete: 'CASCADE' })
   assignment: AssignmentEntity
 }

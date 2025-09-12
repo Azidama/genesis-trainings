@@ -31,19 +31,19 @@ export class CourseRepository {
 
   public async createManyCourses(coursesData: CreateCourseDto[]): Promise<Course[]> {
     const createdCourses: Course[] = []
-    
+
     for (const courseData of coursesData) {
       try {
-        const course = await this.courseCreate(courseData);
+        const course = await this.courseCreate(courseData)
         createdCourses.push(course)
       } catch (error) {
         if (error instanceof HttpException && error.status === 409) {
-          continue;
+          continue
         }
         throw error
       }
     }
-    
+
     return createdCourses
   }
 
