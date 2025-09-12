@@ -1,5 +1,16 @@
 import { IsNotEmpty } from 'class-validator'
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Unique,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm'
 import { User, UserRole } from '@interfaces/users.interface'
 import { EnrollmentEntity } from './enrollment.entity'
 import { SubmissionEntity } from './submissions.entity'
@@ -22,7 +33,7 @@ export class UserEntity extends BaseEntity implements User {
 
   @Column({ nullable: true })
   phone: string
-  
+
   @Column({ default: UserRole.STUDENT })
   role: string
 
@@ -48,10 +59,9 @@ export class UserEntity extends BaseEntity implements User {
 
   @ManyToOne(() => BatchEntity, batch => batch.student)
   @JoinColumn({ name: 'batchId' })
-  batch: BatchEntity;
+  batch: BatchEntity
 
   @Column({ nullable: true })
-  @Unique(['batchId']) 
-  batchId: string;
-
+  @Unique(['batchId'])
+  batchId: string
 }

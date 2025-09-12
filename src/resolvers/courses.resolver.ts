@@ -18,12 +18,11 @@ export class CourseResolver extends CourseRepository {
   @Mutation(() => [Course], {
     description: 'Create many Courses',
   })
-  async createCourses(  
-    @Arg('courseData', () => [CreateCourseDto]) 
-    courseData: CreateCourseDto[]
+  async createCourses(
+    @Arg('courseData', () => [CreateCourseDto])
+    courseData: CreateCourseDto[],
   ): Promise<Course[]> {
     const courses: Course[] = await this.createManyCourses(courseData)
     return courses
   }
-
 }

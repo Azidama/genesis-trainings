@@ -9,7 +9,7 @@ import { UserEntity } from './users.entity'
 @Entity()
 export class BatchEntity extends BaseEntity implements Batch {
   @PrimaryColumn({
-    unique: true
+    unique: true,
   })
   batchId: string
 

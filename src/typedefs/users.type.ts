@@ -13,5 +13,4 @@ export class User {
 
   @Field({ nullable: true })
   role?: string
-
 }

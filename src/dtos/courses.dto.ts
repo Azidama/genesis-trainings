@@ -17,7 +17,6 @@ export class CreateCourseDto implements Partial<Course> {
   @Field()
   @IsString()
   description: string
-
 }
 
 // @InputType()

@@ -17,9 +17,7 @@ export class AssignmentEntity extends BaseEntity implements Assignment {
   @Column({ type: 'timestamp', nullable: true })
   dueDate: Date
 
-  @ManyToOne(() => CourseEntity, course => course.assignments,
-  { onDelete: 'CASCADE' }
-)
+  @ManyToOne(() => CourseEntity, course => course.assignments, { onDelete: 'CASCADE' })
   course: CourseEntity
 
   @OneToMany(() => SubmissionEntity, submission => submission.assignment)

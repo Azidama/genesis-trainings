@@ -1,4 +1,3 @@
-
 export interface Registration {
   id: string
   email: string
@@ -13,4 +12,3 @@ export interface Registration {
   trainingMode?: string
   heardAboutUs?: string
 }
-
