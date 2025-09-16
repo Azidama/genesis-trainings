@@ -10,8 +10,8 @@ FROM node:16.18-buster-slim
 WORKDIR /app
 
 # Install Node Package
-COPY package*.json ./
-RUN npm install --legacy-peer-deps
+# COPY package*.json ./
+# RUN npm install --legacy-peer-deps
 
 # Set Env
 ENV NODE_ENV development

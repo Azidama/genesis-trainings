@@ -13,6 +13,9 @@ export class Registration {
 
   @Field()
   gender?: string
+  
+  @Field()
+  age?: string
 
   @Field()
   education?: string

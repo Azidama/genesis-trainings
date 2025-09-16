@@ -5,6 +5,8 @@ import { HttpException } from '@exceptions/HttpException'
 import { RegistrationEntity } from '@/entities/registrations.entity'
 import { Registration } from '@/interfaces/registrations.interface'
 import { CreateRegistrationDto } from '@/dtos/registrations.dto'
+import { EmailService } from '@/services/email.service'
+import { AWS_SENDER_EMAIL } from '@/config'
 
 @EntityRepository(RegistrationEntity)
 export class RegistrationRepository {
@@ -26,6 +28,33 @@ export class RegistrationRepository {
     if (findUser) throw new HttpException(409, `This email ${registrationData.email} already exists`)
 
     const registeredApplication: Registration = await RegistrationEntity.create({ ...registrationData }).save()
+
+    const htmlBody = `
+      <html>
+        <body>
+          <h2>Welcome ${registrationData.name}!</h2>
+          <p>Thank you for registering at Genesis Trainings.</p>
+        </body>
+      </html>
+    `
+
+    const textBody = `
+      Welcome ${registrationData.name}!
+      Your response has been recorded successfully.
+      Our team will reach out to you soon.
+    `
+
+    const subject = 'Registration Notification'
+
+    const options = {
+      to: registrationData.email,
+      subject,
+      from: AWS_SENDER_EMAIL,
+      html: htmlBody,
+      text: textBody
+    }
+    const mailer = new EmailService
+    mailer.sendEmail(options)
 
     return registeredApplication
   }

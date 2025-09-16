@@ -40,9 +40,6 @@ export class UserEntity extends BaseEntity implements User {
   @Column()
   password: string
 
-  @Column({ nullable: true })
-  trainingMode: string
-
   @Column()
   @CreateDateColumn()
   createdAt: Date

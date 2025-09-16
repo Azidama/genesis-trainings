@@ -27,6 +27,10 @@ export class CreateRegistrationDto implements Partial<Registration> {
 
   @Field({ nullable: true })
   @IsOptional()
+  age?: string
+
+  @Field({ nullable: true })
+  @IsOptional()
   education?: string
 
   @Field({ nullable: true })
