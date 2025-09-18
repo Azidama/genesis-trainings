@@ -46,7 +46,7 @@ export class EmailService {
       return info.messageId
     } catch (error) {
       console.error('Error sending message:', error)
-      throw new Error(
+      console.error(
         `Failed to send email: ${error instanceof Error ? error.message : 'Unknown error'}`
       )
     }

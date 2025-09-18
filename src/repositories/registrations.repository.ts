@@ -5,8 +5,9 @@ import { HttpException } from '@exceptions/HttpException'
 import { RegistrationEntity } from '@/entities/registrations.entity'
 import { Registration } from '@/interfaces/registrations.interface'
 import { CreateRegistrationDto } from '@/dtos/registrations.dto'
-import { EmailService } from '@/services/email.service'
+import { EmailService } from '@/services/email/email.service'
 import { AWS_SENDER_EMAIL } from '@/config'
+import { registrationConfirmationEmail } from '@/utils/htmlTemplates'
 
 @EntityRepository(RegistrationEntity)
 export class RegistrationRepository {
@@ -50,7 +51,7 @@ export class RegistrationRepository {
       to: registrationData.email,
       subject,
       from: AWS_SENDER_EMAIL,
-      html: htmlBody,
+      html: registrationConfirmationEmail,
       text: textBody
     }
     const mailer = new EmailService
