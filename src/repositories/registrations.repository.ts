@@ -1,32 +1,33 @@
 import { hash } from 'bcrypt'
 import { EntityRepository } from 'typeorm'
-import { CreateUserDto, UpdateUserDto } from '@dtos/users.dto'
+// import { CreateRegistrationDto, UpdateRegistrationDto } from '@dtos/registrations.dto'
 import { HttpException } from '@exceptions/HttpException'
 import { RegistrationEntity } from '@/entities/registrations.entity'
 import { Registration } from '@/interfaces/registrations.interface'
 import { CreateRegistrationDto } from '@/dtos/registrations.dto'
 import { EmailService } from '@/services/email/email.service'
-import { AWS_SENDER_EMAIL } from '@/config'
+// import { AWS_SENDER_EMAIL } from '@/config'
 import { registrationConfirmationEmail } from '@/utils/htmlTemplates'
+import { BREVO_SENDER_EMAIL } from '@/config'
 
 @EntityRepository(RegistrationEntity)
 export class RegistrationRepository {
-  public async userFindAll(): Promise<Registration[]> {
-    const users: Registration[] = await RegistrationEntity.find()
+  // public async registrationFindAll(): Promise<Registration[]> {
+  //   const registrations: Registration[] = await RegistrationEntity.find()
 
-    return users
-  }
+  //   return registrations
+  // }
 
-  public async userFindById(userId: string): Promise<Registration> {
-    const user: Registration = await RegistrationEntity.findOne({ where: { id: userId } })
-    if (!user) throw new HttpException(409, "Registration doesn't exist")
+  // public async registrationFindById(registrationId: string): Promise<Registration> {
+  //   const registration: Registration = await RegistrationEntity.findOne({ where: { id: registrationId } })
+  //   if (!registration) throw new HttpException(409, "Registration doesn't exist")
 
-    return user
-  }
+  //   return registration
+  // }
 
   public async registrationCreate(registrationData: CreateRegistrationDto): Promise<Registration> {
-    const findUser: Registration = await RegistrationEntity.findOne({ where: { email: registrationData.email } })
-    if (findUser) throw new HttpException(409, `This email ${registrationData.email} already exists`)
+    const findRegistration: Registration = await RegistrationEntity.findOne({ where: { email: registrationData.email } })
+    if (findRegistration) throw new HttpException(409, `This email ${registrationData.email} already exists`)
 
     const registeredApplication: Registration = await RegistrationEntity.create({ ...registrationData }).save()
 
@@ -48,9 +49,9 @@ export class RegistrationRepository {
     const subject = 'Registration Notification'
 
     const options = {
-      to: registrationData.email,
+      to: [{ email: registrationData.email, name: registrationData.name }],
       subject,
-      from: AWS_SENDER_EMAIL,
+      from: { email: BREVO_SENDER_EMAIL, name: 'Genesis Trainings' },
       html: registrationConfirmationEmail,
       text: textBody
     }
@@ -60,25 +61,25 @@ export class RegistrationRepository {
     return registeredApplication
   }
 
-  public async userUpdate(userId: string, userData: UpdateUserDto): Promise<Registration> {
-    const findUser: Registration = await RegistrationEntity.findOne({ where: { id: userId } })
-    if (!findUser) throw new HttpException(409, "Registration doesn't exist")
+  // public async registrationUpdate(registrationId: string, registrationData: UpdateRegistrationDto): Promise<Registration> {
+  //   const findRegistration: Registration = await RegistrationEntity.findOne({ where: { id: registrationId } })
+  //   if (!findRegistration) throw new HttpException(409, "Registration doesn't exist")
 
-    if (userData.password) {
-      const hashedPassword = await hash(userData.password, 10)
-      userData.password = hashedPassword
-    }
-    await RegistrationEntity.update(userId, { ...userData })
+  //   if (registrationData.password) {
+  //     const hashedPassword = await hash(registrationData.password, 10)
+  //     registrationData.password = hashedPassword
+  //   }
+  //   await RegistrationEntity.update(registrationId, { ...registrationData })
 
-    const updateUser: Registration = await RegistrationEntity.findOne({ where: { id: userId } })
-    return updateUser
-  }
+  //   const updateRegistration: Registration = await RegistrationEntity.findOne({ where: { id: registrationId } })
+  //   return updateRegistration
+  // }
 
-  public async userDelete(userId: string): Promise<Registration> {
-    const findUser: Registration = await RegistrationEntity.findOne({ where: { id: userId } })
-    if (!findUser) throw new HttpException(409, "Registration doesn't exist")
+  // public async registrationDelete(registrationId: string): Promise<Registration> {
+  //   const findRegistration: Registration = await RegistrationEntity.findOne({ where: { id: registrationId } })
+  //   if (!findRegistration) throw new HttpException(409, "Registration doesn't exist")
 
-    await RegistrationEntity.delete({ id: userId })
-    return findUser
-  }
+  //   await RegistrationEntity.delete({ id: registrationId })
+  //   return findRegistration
+  // }
 }

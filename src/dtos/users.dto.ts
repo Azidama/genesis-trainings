@@ -17,11 +17,11 @@ export class CreateUserDto implements Partial<User> {
 
   @Field()
   @IsString()
-  firstName: string
-
-  @Field()
+  name: string
+  
+  @Field({ nullable: true })
   @IsString()
-  lastName: string
+  phone: string
 
   @Field({ nullable: true })
   @IsString()
@@ -39,11 +39,7 @@ export class UpdateUserDto implements Partial<User> {
 
   @Field({ nullable: true })
   @IsString()
-  firstName: string
-
-  @Field({ nullable: true })
-  @IsString()
-  lastName: string
+  name: string
 
   @Field({ nullable: true })
   @IsString()

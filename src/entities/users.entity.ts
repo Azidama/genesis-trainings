@@ -28,7 +28,7 @@ export class UserEntity extends BaseEntity implements User {
   @Column()
   name: string
 
-  @Column()
+  @Column({ nullable: true })
   fatherName: string
 
   @Column({ nullable: true })

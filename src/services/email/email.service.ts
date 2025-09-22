@@ -1,53 +1,47 @@
-import AWS from 'aws-sdk'
-import nodemailer from 'nodemailer'
-import { AWS_ACCESS_KEY, AWS_REGION, AWS_SECRET_KEY } from '@/config'
+import Brevo from "sib-api-v3-sdk"
+import { BREVO_API_KEY } from "@/config"
 
 // Interface for email options
 interface EmailOptions {
-  from: string
-  to: string
+  from: { email: string; name?: string }
+  to: { email: string; name?: string }[]
   subject: string
   text?: string
   html?: string
 }
 
 export class EmailService {
-  private transporter: nodemailer.Transporter
+  private emailApi: Brevo.TransactionalEmailsApi
 
   constructor() {
-    if (!AWS_ACCESS_KEY || !AWS_SECRET_KEY) {
-      throw new Error('AWS credentials are not defined in environment variables')
+    if (!BREVO_API_KEY) {
+      throw new Error("BREVO_API_KEY is not defined in environment variables")
     }
 
-    // Configure AWS SDK (v2)
-    AWS.config.update({
-      accessKeyId: AWS_ACCESS_KEY,
-      secretAccessKey: AWS_SECRET_KEY,
-      region: AWS_REGION || 'us-east-1',
-    })
+    const client = Brevo.ApiClient.instance
+    const apiKey = client.authentications["api-key"]
+    apiKey.apiKey = BREVO_API_KEY
 
-    // Create Nodemailer transporter with AWS SES
-    this.transporter = nodemailer.createTransport({
-      SES: new AWS.SES({ apiVersion: '2010-12-01' }),
-    })
+    this.emailApi = new Brevo.TransactionalEmailsApi()
   }
 
-  async sendEmail(options: EmailOptions): Promise<string> {
+  async sendEmail(options: EmailOptions): Promise<string | undefined> {
     try {
-      const info = await this.transporter.sendMail({
-        from: options.from,
+      const response = await this.emailApi.sendTransacEmail({
+        sender: options.from,
         to: options.to,
         subject: options.subject,
-        text: options.text,
-        html: options.html,
+        textContent: options.text,
+        htmlContent: options.html,
       })
 
-      console.log('Message sent: %s', info.messageId)
-      return info.messageId
+      console.log("Email sent successfully:", response.messageId)
+      return response.messageId
     } catch (error) {
-      console.error('Error sending message:', error)
       console.error(
-        `Failed to send email: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Failed to send email: ${
+          error instanceof Error ? error.message : JSON.stringify(error)
+        }`
       )
     }
   }

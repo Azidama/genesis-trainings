@@ -21,7 +21,6 @@
   "dependencies": {
     "apollo-server-core": "^3.10.0",
     "apollo-server-express": "^3.10.0",
-    "aws-sdk": "^2.1692.0",
     "bcrypt": "^5.0.1",
     "class-validator": "^0.13.2",
     "compression": "^1.7.4",
@@ -37,6 +36,7 @@
     "nodemailer": "^6.10.1",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
+    "sib-api-v3-sdk": "^8.5.0",
     "type-graphql": "^1.1.1",
     "typedi": "^0.10.0",
     "typeorm": "^0.2.45",

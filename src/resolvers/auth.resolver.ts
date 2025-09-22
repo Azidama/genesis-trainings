@@ -10,7 +10,7 @@ export class AuthResolver extends AuthRepository {
     description: 'User signup',
   })
   async signup(@Arg('userData') userData: CreateUserDto): Promise<User> {
-    const user: User = await this.userSignUp(userData)
+    const user: User = await this.userSignup(userData)
     return user
   }
 
