@@ -2,17 +2,24 @@ import { Arg, Mutation, Query, Resolver } from 'type-graphql'
 // import { CreateRegistrationDto, UpdateRegistrationDto } from '@dtos/registrations.dto'
 import { RegistrationRepository } from '@/repositories/registrations.repository'
 import { Registration } from '@/typedefs/registration.type'
-import { CreateRegistrationDto } from '@/dtos/registrations.dto'
+import { CreateRegistrationDto, GetRegistrationDto } from '@/dtos/registrations.dto'
 
 @Resolver()
 export class RegistrationResolver extends RegistrationRepository {
-  // @Query(() => [Registration], {
-  //   description: 'Registration find list',
-  // })
-  // async getRegistrations(): Promise<Registration[]> {
-  //   const registrations: Registration[] = await this.registrationFindAll()
-  //   return registrations
-  // }
+  @Query(() => [Registration], {
+    description: 'Registration find list',
+  })
+  async getRegistrations(
+    @Arg('registrationFilters') registrationFilters: GetRegistrationDto
+  ): Promise<Registration[]> {
+    const registrations: Registration[] = await this.registrationFindAll(
+      registrationFilters.page,
+      registrationFilters.limit,
+      registrationFilters.deleted,
+      registrationFilters.searchFilter
+    )
+    return registrations
+  }
 
   // @Query(() => Registration, {
   //   description: 'Registration find by id',

@@ -29,6 +29,9 @@ export class Registration {
   @Field()
   phone?: string
 
+  @Field()
+  hasPaid?: boolean
+
   @Field(() => [String], {
     nullable: true,
   })
@@ -39,4 +42,11 @@ export class Registration {
 
   @Field()
   heardAboutUs?: string
+  
+  @Field({ nullable: true })
+  createdAt?: Date
+
+  @Field({ nullable: true })
+  deletedAt?: Date
+
 }

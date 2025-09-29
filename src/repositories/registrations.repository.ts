@@ -1,22 +1,50 @@
-import { hash } from 'bcrypt'
-import { EntityRepository } from 'typeorm'
+import { EntityRepository, ILike, IsNull, Like, Not } from 'typeorm'
 // import { CreateRegistrationDto, UpdateRegistrationDto } from '@dtos/registrations.dto'
 import { HttpException } from '@exceptions/HttpException'
 import { RegistrationEntity } from '@/entities/registrations.entity'
 import { Registration } from '@/interfaces/registrations.interface'
 import { CreateRegistrationDto } from '@/dtos/registrations.dto'
 import { EmailService } from '@/services/email/email.service'
-// import { AWS_SENDER_EMAIL } from '@/config'
-import { registrationConfirmationEmail } from '@/utils/htmlTemplates'
-import { BREVO_SENDER_EMAIL } from '@/config'
+import { registrationConfirmationEmail, registrationNotificationForStaff } from '@/utils/htmlTemplates'
+import { BREVO_SENDER_EMAIL, STAFF_EMAIL } from '@/config'
 
 @EntityRepository(RegistrationEntity)
 export class RegistrationRepository {
-  // public async registrationFindAll(): Promise<Registration[]> {
-  //   const registrations: Registration[] = await RegistrationEntity.find()
-
-  //   return registrations
-  // }
+  public async registrationFindAll(
+    page: number,
+    limit: number,
+    deleted?: boolean,
+    searchFilter?: string
+  ): Promise<Registration[]> {
+  
+    const take = limit && limit > 0 ? limit : 10
+    const skip = page && page > 0 ? (page - 1) * take : 0
+  
+    let where: any = {}
+  
+    if (deleted === true) {
+      where.deletedAt = Not(null)
+    } else if (deleted === false) {
+      where.deletedAt = IsNull()
+    }
+  
+    if (searchFilter) {
+      where = [
+        { ...where, email: ILike(`%${searchFilter}%`) },
+        { ...where, name: ILike(`%${searchFilter}%`) },
+      ]
+    }
+  
+    const registrations: Registration[] = await RegistrationEntity.find({
+      where,
+      skip,
+      take,
+      order: { createdAt: "DESC" },
+    })
+  
+    return registrations
+  }
+  
 
   // public async registrationFindById(registrationId: string): Promise<Registration> {
   //   const registration: Registration = await RegistrationEntity.findOne({ where: { id: registrationId } })
@@ -31,32 +59,29 @@ export class RegistrationRepository {
 
     const registeredApplication: Registration = await RegistrationEntity.create({ ...registrationData }).save()
 
-    const htmlBody = `
-      <html>
-        <body>
-          <h2>Welcome ${registrationData.name}!</h2>
-          <p>Thank you for registering at Genesis Trainings.</p>
-        </body>
-      </html>
-    `
-
-    const textBody = `
-      Welcome ${registrationData.name}!
-      Your response has been recorded successfully.
-      Our team will reach out to you soon.
-    `
-
+    const mailer = new EmailService
     const subject = 'Registration Notification'
 
-    const options = {
+    const customerRegistrationOptions = {
       to: [{ email: registrationData.email, name: registrationData.name }],
       subject,
       from: { email: BREVO_SENDER_EMAIL, name: 'Genesis Trainings' },
-      html: registrationConfirmationEmail,
-      text: textBody
+      html: registrationConfirmationEmail({
+        name: registrationData.name
+      })
     }
-    const mailer = new EmailService
-    mailer.sendEmail(options)
+    mailer.sendEmail(customerRegistrationOptions)
+    
+    const staffNotificationOptions = {
+      to: [{ email: STAFF_EMAIL, name: 'Genesis Trainings Staff' }],
+      subject,
+      from: { email: BREVO_SENDER_EMAIL, name: 'Genesis Trainings' },
+      html: registrationNotificationForStaff({
+        name: registrationData.name,
+        email: registrationData.email
+      })
+    }
+    mailer.sendEmail(staffNotificationOptions)
 
     return registeredApplication
   }

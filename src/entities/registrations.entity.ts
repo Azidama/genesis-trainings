@@ -5,7 +5,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  DeleteDateColumn
 } from 'typeorm'
 import { Registration } from '@/interfaces/registrations.interface'
 
@@ -21,7 +22,7 @@ export class RegistrationEntity extends BaseEntity implements Registration {
   @Column()
   name: string
 
-  @Column()
+  @Column({ nullable: true })
   age: string
 
   @Column()
@@ -33,20 +34,23 @@ export class RegistrationEntity extends BaseEntity implements Registration {
   @Column({ nullable: true })
   gender: string
 
-  @Column({ nullable: true })
+  @Column()
   education: string
 
-  @Column({ nullable: true })
+  @Column()
   city: string
 
-  @Column({ unique: true, nullable: true })
+  @Column()
   cnic: string
 
   @Column({ nullable: true })
   trainingMode: string
 
-  @Column('simple-array', { nullable: true })
+  @Column('simple-array')
   courses: string[]
+
+  @Column({ default: false })
+  hasPaid: boolean
 
   @Column()
   @CreateDateColumn()
@@ -58,4 +62,8 @@ export class RegistrationEntity extends BaseEntity implements Registration {
 
   @Column({ nullable: true })
   heardAboutUs: string
+
+  @Column()
+  @DeleteDateColumn()
+  deletedAt: Date
 }

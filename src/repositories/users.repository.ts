@@ -20,16 +20,6 @@ export class UserRepository {
     return user
   }
 
-  public async userCreate(userData: CreateUserDto): Promise<User> {
-    const findUser: User = await UserEntity.findOne({ where: { email: userData.email } })
-    if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`)
-
-    const hashedPassword = await hash(userData.password, 10)
-    const createUserData: User = await UserEntity.create({ ...userData, password: hashedPassword }).save()
-
-    return createUserData
-  }
-
   public async userUpdate(userId: string, userData: UpdateUserDto): Promise<User> {
     const findUser: User = await UserEntity.findOne({ where: { id: userId } })
     if (!findUser) throw new HttpException(409, "User doesn't exist")
