@@ -66,6 +66,10 @@ export class GetRegistrationDto {
   @Field({ nullable: true })
   @IsOptional()
   deleted: boolean
+   
+  @Field({ nullable: true })
+  @IsOptional()
+  paid: boolean
 
   @Field({ nullable: true })
   @IsOptional()

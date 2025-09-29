@@ -3,50 +3,47 @@ import { Field, ObjectType } from 'type-graphql'
 @ObjectType()
 export class Registration {
   @Field()
-  id: string
-
+    id: string
   @Field()
-  email: string
-
+    email: string
   @Field()
-  name?: string
-
+    name?: string
   @Field()
-  gender?: string
-  
+    gender?: string
   @Field()
-  age?: string
-
+    age?: string
   @Field()
-  education?: string
-
+    education?: string
   @Field()
-  city?: string
-
+    city?: string
   @Field()
-  cnic?: string
-
+    cnic?: string
   @Field()
-  phone?: string
-
+    phone?: string
   @Field()
-  hasPaid?: boolean
-
+    hasPaid?: boolean
   @Field(() => [String], {
     nullable: true,
   })
-  courses?: string[]
-
+    courses?: string[]
   @Field()
-  trainingMode?: string
-
+    trainingMode?: string
   @Field()
-  heardAboutUs?: string
-  
+    heardAboutUs?: string
   @Field({ nullable: true })
-  createdAt?: Date
-
+    createdAt?: Date
   @Field({ nullable: true })
-  deletedAt?: Date
+    deletedAt?: Date
+}
 
+@ObjectType()
+export class RegistrationsPage {
+  @Field(() => [Registration], { nullable: true })
+    registrations: Registration[]
+  @Field()
+    count: number
+  @Field()
+    page: number 
+  @Field()
+    totalPages: number
 }
