@@ -21,13 +21,13 @@ export class UserResolver extends UserRepository {
     return user
   }
 
-  @Mutation(() => User, {
-    description: 'User create',
-  })
-  async createUser(@Arg('userData') userData: CreateUserDto): Promise<User> {
-    const user: User = await this.userCreate(userData)
-    return user
-  }
+  // @Mutation(() => User, {
+  //   description: 'User create',
+  // })
+  // async createUser(@Arg('userData') userData: CreateUserDto): Promise<User> {
+  //   const user: User = await this.userCreate(userData)
+  //   return user
+  // }
 
   @Mutation(() => User, {
     description: 'User update',

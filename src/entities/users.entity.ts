@@ -28,7 +28,7 @@ export class UserEntity extends BaseEntity implements User {
   @Column()
   name: string
 
-  @Column()
+  @Column({ nullable: true })
   fatherName: string
 
   @Column({ nullable: true })
@@ -39,9 +39,6 @@ export class UserEntity extends BaseEntity implements User {
 
   @Column()
   password: string
-
-  @Column({ nullable: true })
-  trainingMode: string
 
   @Column()
   @CreateDateColumn()

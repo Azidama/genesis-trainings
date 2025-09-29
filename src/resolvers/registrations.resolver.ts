@@ -1,26 +1,33 @@
 import { Arg, Mutation, Query, Resolver } from 'type-graphql'
-import { CreateUserDto, UpdateUserDto } from '@dtos/users.dto'
+// import { CreateRegistrationDto, UpdateRegistrationDto } from '@dtos/registrations.dto'
 import { RegistrationRepository } from '@/repositories/registrations.repository'
 import { Registration } from '@/typedefs/registration.type'
-import { CreateRegistrationDto } from '@/dtos/registrations.dto'
+import { CreateRegistrationDto, GetRegistrationDto } from '@/dtos/registrations.dto'
 
 @Resolver()
 export class RegistrationResolver extends RegistrationRepository {
   @Query(() => [Registration], {
     description: 'Registration find list',
   })
-  async getUsers(): Promise<Registration[]> {
-    const users: Registration[] = await this.userFindAll()
-    return users
+  async getRegistrations(
+    @Arg('registrationFilters') registrationFilters: GetRegistrationDto
+  ): Promise<Registration[]> {
+    const registrations: Registration[] = await this.registrationFindAll(
+      registrationFilters.page,
+      registrationFilters.limit,
+      registrationFilters.deleted,
+      registrationFilters.searchFilter
+    )
+    return registrations
   }
 
-  @Query(() => Registration, {
-    description: 'Registration find by id',
-  })
-  async getUserById(@Arg('userId') userId: string): Promise<Registration> {
-    const user: Registration = await this.userFindById(userId)
-    return user
-  }
+  // @Query(() => Registration, {
+  //   description: 'Registration find by id',
+  // })
+  // async getRegistrationById(@Arg('registrationId') registrationId: string): Promise<Registration> {
+  //   const registration: Registration = await this.registrationFindById(registrationId)
+  //   return registration
+  // }
 
   @Mutation(() => Registration, {
     description: 'Registration create',
@@ -30,19 +37,19 @@ export class RegistrationResolver extends RegistrationRepository {
     return registration
   }
 
-  @Mutation(() => Registration, {
-    description: 'Registration update',
-  })
-  async updateUser(@Arg('userId') userId: string, @Arg('userData') userData: UpdateUserDto): Promise<Registration> {
-    const user: Registration = await this.userUpdate(userId, userData)
-    return user
-  }
+  // @Mutation(() => Registration, {
+  //   description: 'Registration update',
+  // })
+  // async updateRegistration(@Arg('registrationId') registrationId: string, @Arg('registrationData') registrationData: UpdateRegistrationDto): Promise<Registration> {
+  //   const registration: Registration = await this.registrationUpdate(registrationId, registrationData)
+  //   return registration
+  // }
 
-  @Mutation(() => Registration, {
-    description: 'Registration delete',
-  })
-  async deleteUser(@Arg('userId') userId: string): Promise<Registration> {
-    const user: Registration = await this.userDelete(userId)
-    return user
-  }
+  // @Mutation(() => Registration, {
+  //   description: 'Registration delete',
+  // })
+  // async deleteRegistration(@Arg('registrationId') registrationId: string): Promise<Registration> {
+  //   const registration: Registration = await this.registrationDelete(registrationId)
+  //   return registration
+  // }
 }

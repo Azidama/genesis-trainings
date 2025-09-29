@@ -27,6 +27,10 @@ export class CreateRegistrationDto implements Partial<Registration> {
 
   @Field({ nullable: true })
   @IsOptional()
+  age?: string
+
+  @Field({ nullable: true })
+  @IsOptional()
   education?: string
 
   @Field({ nullable: true })
@@ -49,4 +53,21 @@ export class CreateRegistrationDto implements Partial<Registration> {
   @Field({ nullable: true })
   @IsOptional()
   heardAboutUs?: string
+}
+
+@InputType()
+export class GetRegistrationDto {
+  @Field()
+  page: number  
+  
+  @Field()
+  limit: number
+ 
+  @Field({ nullable: true })
+  @IsOptional()
+  deleted: boolean
+
+  @Field({ nullable: true })
+  @IsOptional()
+  searchFilter?: string
 }

@@ -13,10 +13,12 @@
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
     "lint:fix": "npm run lint -- --fix",
     "deploy:prod": "npm run build && pm2 start ecosystem.config.js --only prod",
-    "deploy:dev": "pm2 start ecosystem.config.js --only dev"
+    "deploy:dev": "pm2 start ecosystem.config.js --only dev",
+    "db:drop": "typeorm schema:drop -c src/database/index.ts",
+    "db:sync": "typeorm schema:sync -d src/database/index.ts",
+    "db:reset": "npm run db:drop && npm run db:sync"
   },
   "dependencies": {
-    "@aws-sdk/client-ses": "^3.888.0",
     "apollo-server-core": "^3.10.0",
     "apollo-server-express": "^3.10.0",
     "bcrypt": "^5.0.1",
@@ -31,9 +33,10 @@
     "helmet": "^5.1.1",
     "hpp": "^0.2.3",
     "jsonwebtoken": "^8.5.1",
-    "nodemailer": "^7.0.6",
+    "nodemailer": "^6.10.1",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
+    "sib-api-v3-sdk": "^8.5.0",
     "type-graphql": "^1.1.1",
     "typedi": "^0.10.0",
     "typeorm": "^0.2.45",
