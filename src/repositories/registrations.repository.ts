@@ -14,8 +14,9 @@ export class RegistrationRepository {
     page: number,
     limit: number,
     deleted?: boolean,
+    paid?: boolean,
     searchFilter?: string
-  ): Promise<Registration[]> {
+  ): Promise<{ registrations: Registration[]; count: number; page: number; totalPages: number }> {
   
     const take = limit && limit > 0 ? limit : 10
     const skip = page && page > 0 ? (page - 1) * take : 0
@@ -27,22 +28,33 @@ export class RegistrationRepository {
     } else if (deleted === false) {
       where.deletedAt = IsNull()
     }
-  
+    
+    if (paid === true) {
+      where.hasPaid = true
+    } else if (deleted === false) {
+      where.hasPaid = false
+    }
+
     if (searchFilter) {
       where = [
         { ...where, email: ILike(`%${searchFilter}%`) },
-        { ...where, name: ILike(`%${searchFilter}%`) },
+        { ...where, name: ILike(`%${searchFilter}%`) }
       ]
     }
   
-    const registrations: Registration[] = await RegistrationEntity.find({
+    const [registrations, count] = await RegistrationEntity.findAndCount({
       where,
       skip,
       take,
-      order: { createdAt: "DESC" },
+      order: { createdAt: "DESC" }
     })
   
-    return registrations
+    return {
+      registrations,
+      count,
+      page: page ?? 1,
+      totalPages: Math.ceil(count / take) ?? 0
+    }
   }
   
 

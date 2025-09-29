@@ -260,7 +260,8 @@ export const userSignupTemplate = ({ name }) => `
   <body>
     <div class="container">
       <h2>Welcome, ${name}!</h2>
-      <p>Thanks for signing up. We're glad to have you with us.</p>
+      <p>Your account was created successfully!</p>
+      <p>You can now access and log in to Genesis Trainings.</p>
       <div class="footer">
         <p>© Genesis Trainings</p>
       </div>
