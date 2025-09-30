@@ -12,3 +12,10 @@ export interface Registration {
   trainingMode?: string
   heardAboutUs?: string
 }
+
+export interface RegistrationListResult {
+  registrations: Registration[]
+  count: number
+  page: number
+  totalPages: number
+}

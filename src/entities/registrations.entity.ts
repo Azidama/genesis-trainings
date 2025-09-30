@@ -52,18 +52,15 @@ export class RegistrationEntity extends BaseEntity implements Registration {
   @Column({ default: false })
   hasPaid: boolean
 
-  @Column()
   @CreateDateColumn()
   createdAt: Date
 
-  @Column()
-  @UpdateDateColumn()
+  @UpdateDateColumn({ nullable: true })
   updatedAt: Date
 
   @Column({ nullable: true })
   heardAboutUs: string
 
-  @Column()
-  @DeleteDateColumn()
+  @DeleteDateColumn({ nullable: true })
   deletedAt: Date
 }

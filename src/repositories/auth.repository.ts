@@ -56,7 +56,7 @@ export class AuthRepository {
     const findUser: User = await UserEntity.findOne({ where: { email } })
     if (!findUser) throw new HttpException(409, `The email ${email} was not found`)
     
-    // send email to user with reset link
+    // Create reset link and send email
     const user = {
       id: findUser.id,
       email: findUser.email,
@@ -72,8 +72,7 @@ export class AuthRepository {
       to: [{ email: user.email, name: user.name }],
       subject,
       from: { email: BREVO_SENDER_EMAIL, name: 'Genesis Trainings' },
-      html: resetPasswordEmail
-        .replace("{{resetLink}}", resetURL),
+      html: resetPasswordEmail({ resetURL })
     }
     const mailer = new EmailService
     mailer.sendEmail(options)

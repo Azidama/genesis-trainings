@@ -91,7 +91,7 @@ export const registrationConfirmationEmail = ({ name }) => `
   </body>
 </html>
 `
-export const resetPasswordEmail = `
+export const resetPasswordEmail = ({ resetURL }) => `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -117,7 +117,7 @@ export const resetPasswordEmail = `
                 <p>Hello,</p>
                 <p>You requested to reset your password. Click the button below to set a new password:</p>
                 <p style="text-align:center; margin:30px 0;">
-                  <a href="{{resetLink}}" target="_blank" style="background-color:#004875; color:#ffffff; text-decoration:none; padding:12px 24px; border-radius:5px; font-weight:bold;">
+                  <a href="${resetURL}" target="_blank" style="background-color:#004875; color:#ffffff; text-decoration:none; padding:12px 24px; border-radius:5px; font-weight:bold;">
                     Reset Password
                   </a>
                 </p>

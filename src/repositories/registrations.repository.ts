@@ -2,7 +2,7 @@ import { EntityRepository, ILike, IsNull, Like, Not } from 'typeorm'
 // import { CreateRegistrationDto, UpdateRegistrationDto } from '@dtos/registrations.dto'
 import { HttpException } from '@exceptions/HttpException'
 import { RegistrationEntity } from '@/entities/registrations.entity'
-import { Registration } from '@/interfaces/registrations.interface'
+import { Registration, RegistrationListResult } from '@/interfaces/registrations.interface'
 import { CreateRegistrationDto } from '@/dtos/registrations.dto'
 import { EmailService } from '@/services/email/email.service'
 import { registrationConfirmationEmail, registrationNotificationForStaff } from '@/utils/htmlTemplates'
@@ -16,16 +16,15 @@ export class RegistrationRepository {
     deleted?: boolean,
     paid?: boolean,
     searchFilter?: string
-  ): Promise<{ registrations: Registration[]; count: number; page: number; totalPages: number }> {
+  ): Promise<RegistrationListResult> {
   
     const take = limit && limit > 0 ? limit : 10
     const skip = page && page > 0 ? (page - 1) * take : 0
   
     let where: any = {}
-  
-    if (deleted === true) {
-      where.deletedAt = Not(null)
-    } else if (deleted === false) {
+    if (deleted) {
+      where.deletedAt = Not(IsNull())
+    } else {
       where.deletedAt = IsNull()
     }
     
@@ -46,7 +45,8 @@ export class RegistrationRepository {
       where,
       skip,
       take,
-      order: { createdAt: "DESC" }
+      order: { createdAt: "DESC" },
+      withDeleted: !!deleted
     })
   
     return {
@@ -112,11 +112,19 @@ export class RegistrationRepository {
   //   return updateRegistration
   // }
 
-  // public async registrationDelete(registrationId: string): Promise<Registration> {
-  //   const findRegistration: Registration = await RegistrationEntity.findOne({ where: { id: registrationId } })
-  //   if (!findRegistration) throw new HttpException(409, "Registration doesn't exist")
+  public async registrationMarkPaid(registrationId: string): Promise<Registration> {
+    const findRegistration: Registration = await RegistrationEntity.findOne({ where: { id: registrationId } })
+    if (!findRegistration) throw new HttpException(409, "Registration doesn't exist")
 
-  //   await RegistrationEntity.delete({ id: registrationId })
-  //   return findRegistration
-  // }
+    await RegistrationEntity.update({ id: registrationId }, { hasPaid: true })
+    return findRegistration
+  }
+
+  public async registrationDelete(registrationId: string): Promise<Registration> {
+    const findRegistration: Registration = await RegistrationEntity.findOne({ where: { id: registrationId } })
+    if (!findRegistration) throw new HttpException(409, "Registration doesn't exist")
+
+    await RegistrationEntity.update({ id: registrationId }, { deletedAt: new Date() })
+    return findRegistration
+  }
 }
