@@ -1,4 +1,4 @@
-import { Arg, Mutation, Query, Resolver } from 'type-graphql'
+import { Arg, Authorized, Mutation, Query, Resolver } from 'type-graphql'
 // import { CreateRegistrationDto, UpdateRegistrationDto } from '@dtos/registrations.dto'
 import { RegistrationRepository } from '@/repositories/registrations.repository'
 import { RegistrationsPage, Registration } from '@/typedefs/registration.type'
@@ -7,6 +7,7 @@ import { RegistrationListResult } from '@/interfaces/registrations.interface'
 
 @Resolver()
 export class RegistrationResolver extends RegistrationRepository {
+  @Authorized('Admin')
   @Query(() => RegistrationsPage, {
     description: 'Registration find list',
   })
@@ -60,6 +61,14 @@ export class RegistrationResolver extends RegistrationRepository {
   })
   async deleteRegistration(@Arg('registrationId') registrationId: string): Promise<Registration> {
     const registration: Registration = await this.registrationDelete(registrationId)
+    return registration
+  }
+
+  @Mutation(() => Registration, {
+    description: 'Registration reset',
+  })
+  async resetRegistration(@Arg('registrationId') registrationId: string): Promise<Registration> {
+    const registration: Registration = await this.registrationReset(registrationId)
     return registration
   }
 }

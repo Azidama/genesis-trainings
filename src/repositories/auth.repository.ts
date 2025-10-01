@@ -28,7 +28,7 @@ const createCookie = (tokenData: TokenData): string => {
 
 @EntityRepository(UserEntity)
 export class AuthRepository {
-  public async userLogIn(userData: LoginUserDto, res: Response): Promise<Boolean> {
+  public async userLogIn(userData: LoginUserDto, res: Response): Promise<String> {
     const findUser: User = await UserEntity.findOne({ where: { email: userData.email } })
     if (!findUser) throw new HttpException(409, `The email ${userData.email} was not found`)
 
@@ -39,6 +39,7 @@ export class AuthRepository {
       id: findUser.id,
       email: findUser.email,
       name: findUser.name,
+      role: findUser.role
     }
     const expiresIn: number = 86400
     const token = createToken(user, expiresIn)
@@ -49,7 +50,7 @@ export class AuthRepository {
       maxAge: expiresIn * 1000,
     })
 
-    return true
+    return token
   }
 
   public async passwordForgot(email: string): Promise<Boolean> {
@@ -61,6 +62,7 @@ export class AuthRepository {
       id: findUser.id,
       email: findUser.email,
       name: findUser.name,
+      role: findUser.role
     }
     const expiresIn: number = 3600
     const token = createToken(user, expiresIn)
