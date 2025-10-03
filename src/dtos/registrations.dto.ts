@@ -69,7 +69,7 @@ export class GetRegistrationDto {
    
   @Field({ nullable: true })
   @IsOptional()
-  paid: boolean
+  approved: boolean
 
   @Field({ nullable: true })
   @IsOptional()

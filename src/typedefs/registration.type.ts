@@ -21,7 +21,7 @@ export class Registration {
   @Field()
     phone?: string
   @Field()
-    hasPaid?: boolean
+    approved?: boolean
   @Field(() => [String], {
     nullable: true,
   })

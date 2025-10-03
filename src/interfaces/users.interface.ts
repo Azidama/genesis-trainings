@@ -3,12 +3,14 @@ export interface User {
   email: string
   password: string
   name: string
+  role?: string
 }
 
 export interface UserInfo {
   id: string
   email: string
   name?: string
+  role?: string
 }
 
 export enum UserRole {

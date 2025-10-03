@@ -9,8 +9,10 @@ export interface Registration {
   cnic?: string
   phone?: string
   courses?: string[]
+  approved: boolean
   trainingMode?: string
   heardAboutUs?: string
+  deletedAt?: Date
 }
 
 export interface RegistrationListResult {

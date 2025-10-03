@@ -14,13 +14,13 @@ export class AuthResolver extends AuthRepository {
     return user
   }
 
-  @Mutation(() => Boolean, {
+  @Mutation(() => String, {
     description: 'User login',
   })
-  async login(@Arg('userData') userData: LoginUserDto, @Ctx() ctx: { res: Response }): Promise<Boolean> {
+  async login(@Arg('userData') userData: LoginUserDto, @Ctx() ctx: { res: Response }): Promise<String> {
     try {
-      await this.userLogIn(userData, ctx.res)
-      return true
+      const token = await this.userLogIn(userData, ctx.res)
+      return token
     } catch (error) {
       throw error
     }

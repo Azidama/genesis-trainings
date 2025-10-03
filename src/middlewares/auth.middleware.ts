@@ -24,7 +24,7 @@ export const AuthMiddleware = async req => {
       const { user } = verify(Authorization, SECRET_KEY) as DataStoredInToken
       const id = user.id
       const userRepository = getRepository(UserEntity)
-      const findUser = await userRepository.findOne(id, { select: ['id', 'email'] })
+      const findUser = await userRepository.findOne(id, { select: ['id', 'email', 'role'] })
       return findUser
     }
 
@@ -34,10 +34,18 @@ export const AuthMiddleware = async req => {
   }
 }
 
-export const AuthCheckerMiddleware: AuthChecker<RequestWithUser> = async ({ context: { user } }) => {
+export const AuthCheckerMiddleware: AuthChecker<RequestWithUser> = async ({ context: { user } }, roles) => {
   if (!user) {
     throw new AuthenticationError('UNAUTHENTICATED')
   }
 
-  return true
+  if (roles.length === 0) {
+    return true
+  }
+
+  if (roles.includes(user.role)) {
+    return true
+  }
+
+  throw new AuthenticationError('FORBIDDEN')
 }

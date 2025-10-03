@@ -1,5 +1,4 @@
-import { Arg, Mutation, Query, Resolver } from 'type-graphql'
-// import { CreateRegistrationDto, UpdateRegistrationDto } from '@dtos/registrations.dto'
+import { Arg, Authorized, Mutation, Query, Resolver } from 'type-graphql'
 import { RegistrationRepository } from '@/repositories/registrations.repository'
 import { RegistrationsPage, Registration } from '@/typedefs/registration.type'
 import { CreateRegistrationDto, GetRegistrationDto } from '@/dtos/registrations.dto'
@@ -7,6 +6,7 @@ import { RegistrationListResult } from '@/interfaces/registrations.interface'
 
 @Resolver()
 export class RegistrationResolver extends RegistrationRepository {
+  @Authorized('Admin')
   @Query(() => RegistrationsPage, {
     description: 'Registration find list',
   })
@@ -17,7 +17,7 @@ export class RegistrationResolver extends RegistrationRepository {
       registrationFilters.page,
       registrationFilters.limit,
       registrationFilters.deleted,
-      registrationFilters.paid,
+      registrationFilters.approved,
       registrationFilters.searchFilter
     )
     return data
@@ -48,10 +48,10 @@ export class RegistrationResolver extends RegistrationRepository {
   // }
 
   @Mutation(() => Registration, {
-    description: 'Registration update hasPaid flag',
+    description: 'Registration update approved flag',
   })
-  async markPaidRegistration(@Arg('registrationId') registrationId: string): Promise<Registration> {
-    const registration: Registration = await this.registrationMarkPaid(registrationId)
+  async markRegistrationApproved(@Arg('registrationId') registrationId: string): Promise<Registration> {
+    const registration: Registration = await this.registrationMarkApproved(registrationId)
     return registration
   }
 
@@ -60,6 +60,14 @@ export class RegistrationResolver extends RegistrationRepository {
   })
   async deleteRegistration(@Arg('registrationId') registrationId: string): Promise<Registration> {
     const registration: Registration = await this.registrationDelete(registrationId)
+    return registration
+  }
+
+  @Mutation(() => Registration, {
+    description: 'Registration reset',
+  })
+  async resetRegistration(@Arg('registrationId') registrationId: string): Promise<Registration> {
+    const registration: Registration = await this.registrationReset(registrationId)
     return registration
   }
 }
