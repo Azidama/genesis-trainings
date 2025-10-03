@@ -1,5 +1,4 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from 'type-graphql'
-// import { CreateRegistrationDto, UpdateRegistrationDto } from '@dtos/registrations.dto'
 import { RegistrationRepository } from '@/repositories/registrations.repository'
 import { RegistrationsPage, Registration } from '@/typedefs/registration.type'
 import { CreateRegistrationDto, GetRegistrationDto } from '@/dtos/registrations.dto'
@@ -18,7 +17,7 @@ export class RegistrationResolver extends RegistrationRepository {
       registrationFilters.page,
       registrationFilters.limit,
       registrationFilters.deleted,
-      registrationFilters.paid,
+      registrationFilters.approved,
       registrationFilters.searchFilter
     )
     return data
@@ -49,10 +48,10 @@ export class RegistrationResolver extends RegistrationRepository {
   // }
 
   @Mutation(() => Registration, {
-    description: 'Registration update hasPaid flag',
+    description: 'Registration update approved flag',
   })
-  async markPaidRegistration(@Arg('registrationId') registrationId: string): Promise<Registration> {
-    const registration: Registration = await this.registrationMarkPaid(registrationId)
+  async markRegistrationApproved(@Arg('registrationId') registrationId: string): Promise<Registration> {
+    const registration: Registration = await this.registrationMarkApproved(registrationId)
     return registration
   }
 

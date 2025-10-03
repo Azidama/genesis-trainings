@@ -50,7 +50,7 @@ export class RegistrationEntity extends BaseEntity implements Registration {
   courses: string[]
 
   @Column({ default: false })
-  hasPaid: boolean
+  approved: boolean
 
   @CreateDateColumn()
   createdAt: Date

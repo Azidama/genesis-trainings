@@ -9,7 +9,7 @@ export interface Registration {
   cnic?: string
   phone?: string
   courses?: string[]
-  hasPaid: boolean
+  approved: boolean
   trainingMode?: string
   heardAboutUs?: string
   deletedAt?: Date

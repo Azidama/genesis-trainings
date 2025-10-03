@@ -19,5 +19,5 @@ export class EnrollmentEntity extends BaseEntity implements Enrollment {
   enrolledAt: Date
 
   @Column({ default: true })
-  isActive: boolean
+  isPaid: boolean
 }

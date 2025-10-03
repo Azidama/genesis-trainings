@@ -14,7 +14,7 @@ export class RegistrationRepository {
     page: number,
     limit: number,
     deleted?: boolean,
-    paid?: boolean,
+    approved?: boolean,
     searchFilter?: string
   ): Promise<RegistrationListResult> {
   
@@ -28,10 +28,10 @@ export class RegistrationRepository {
       where.deletedAt = IsNull()
     }
     
-    if (paid === true) {
-      where.hasPaid = true
+    if (approved === true) {
+      where.approved = true
     } else if (deleted === false) {
-      where.hasPaid = false
+      where.approved = false
     }
 
     if (searchFilter) {
@@ -112,18 +112,18 @@ export class RegistrationRepository {
   //   return updateRegistration
   // }
 
-  public async registrationMarkPaid(registrationId: string): Promise<Registration> {
+  public async registrationMarkApproved(registrationId: string): Promise<Registration> {
     const findRegistration: Registration = await RegistrationEntity.findOne({ where: { id: registrationId }})
     if (!findRegistration || findRegistration.deletedAt) throw new HttpException(409, "Registration doesn't exist")
 
-    await RegistrationEntity.update({ id: registrationId }, { hasPaid: true })
+    await RegistrationEntity.update({ id: registrationId }, { approved: true })
     return findRegistration
   }
 
   public async registrationDelete(registrationId: string): Promise<Registration> {
     const findRegistration: Registration = await RegistrationEntity.findOne({ where: { id: registrationId } })
     if (!findRegistration) throw new HttpException(409, "Registration doesn't exist")
-    if (findRegistration.hasPaid) throw new HttpException(409, "Registration is marked as paid, mark as unpaid to delete!")
+    if (findRegistration.approved) throw new HttpException(409, "Registration is marked as approved, mark as unapproved to delete!")
 
     await RegistrationEntity.update({ id: registrationId }, { deletedAt: new Date() })
     return findRegistration
@@ -140,8 +140,8 @@ export class RegistrationRepository {
       if (findRegistration.deletedAt) {
         await RegistrationEntity.update({ id: registrationId }, { deletedAt: null })
       }
-      if (findRegistration.hasPaid) {
-        await RegistrationEntity.update({ id: registrationId }, { hasPaid: false })
+      if (findRegistration.approved) {
+        await RegistrationEntity.update({ id: registrationId }, { approved: false })
       }
       return findRegistration
     } catch (error) {
