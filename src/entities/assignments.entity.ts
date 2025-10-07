@@ -1,4 +1,4 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, Relation } from 'typeorm'
 import { Assignment } from '@/interfaces/assignments.interface'
 import { CourseEntity } from './courses.entity'
 import { SubmissionEntity } from './submissions.entity'
@@ -18,8 +18,8 @@ export class AssignmentEntity extends BaseEntity implements Assignment {
   dueDate: Date
 
   @ManyToOne(() => CourseEntity, course => course.assignments, { onDelete: 'CASCADE' })
-  course: CourseEntity
+  course: Relation<CourseEntity>
 
   @OneToMany(() => SubmissionEntity, submission => submission.assignment)
-  submissions: SubmissionEntity[]
+  submissions: Relation<SubmissionEntity>[]
 }

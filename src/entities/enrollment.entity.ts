@@ -1,4 +1,4 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique } from 'typeorm'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique, Relation } from 'typeorm'
 import { CourseEntity } from './courses.entity'
 import { UserEntity } from './users.entity'
 import { Enrollment } from '@/interfaces/enrollments.interface'
@@ -10,10 +10,10 @@ export class EnrollmentEntity extends BaseEntity implements Enrollment {
   id: number
 
   @ManyToOne(() => UserEntity, student => student.enrollments, { onDelete: 'CASCADE' })
-  student: UserEntity
+  student: Relation<UserEntity>
 
   @ManyToOne(() => CourseEntity, course => course.enrollments, { onDelete: 'CASCADE' })
-  course: CourseEntity
+  course: Relation<CourseEntity>
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   enrolledAt: Date

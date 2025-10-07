@@ -11,7 +11,7 @@ export const dbConnection = async () => {
     host: POSTGRES_HOST,
     port: Number(POSTGRES_PORT),
     database: POSTGRES_DB,
-    synchronize: true,
+    synchronize: false,
     logging: false,
     entities: [join(__dirname, '../**/*.entity{.ts,.js}')],
     migrations: [join(__dirname, '../**/*.migration{.ts,.js}')],

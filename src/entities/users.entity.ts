@@ -10,6 +10,7 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  Relation,
 } from 'typeorm'
 import { User, UserRole } from '@interfaces/users.interface'
 import { EnrollmentEntity } from './enrollment.entity'
@@ -49,14 +50,14 @@ export class UserEntity extends BaseEntity implements User {
   updatedAt: Date
 
   @OneToMany(() => EnrollmentEntity, enrollment => enrollment.student, { nullable: true })
-  enrollments: EnrollmentEntity[]
+  enrollments: Relation<EnrollmentEntity>[]
 
   @OneToMany(() => SubmissionEntity, submission => submission.student, { nullable: true })
-  submissions: SubmissionEntity[]
+  submissions: Relation<SubmissionEntity>[]
 
   @ManyToOne(() => BatchEntity, batch => batch.student)
   @JoinColumn({ name: 'batchId' })
-  batch: BatchEntity
+  batch: Relation<BatchEntity>
 
   @Column({ nullable: true })
   @Unique(['batchId'])

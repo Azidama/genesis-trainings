@@ -1,4 +1,4 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany, Unique, PrimaryColumn } from 'typeorm'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany, Unique, PrimaryColumn, Relation } from 'typeorm'
 import { Course } from '@/interfaces/courses.interface'
 import { AssignmentEntity } from './assignments.entity'
 import { EnrollmentEntity } from './enrollment.entity'
@@ -18,8 +18,8 @@ export class CourseEntity extends BaseEntity implements Course {
   description: string
 
   @OneToMany(() => AssignmentEntity, enrollment => enrollment.course)
-  enrollments: EnrollmentEntity[]
+  enrollments: Relation<EnrollmentEntity>[]
 
   @OneToMany(() => AssignmentEntity, assignment => assignment.course)
-  assignments: AssignmentEntity[]
+  assignments: Relation<AssignmentEntity>[]
 }
