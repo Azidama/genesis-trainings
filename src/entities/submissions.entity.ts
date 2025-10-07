@@ -1,4 +1,4 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique } from 'typeorm'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique, Relation } from 'typeorm'
 import { UserEntity } from './users.entity'
 import { AssignmentEntity } from './assignments.entity'
 import { Submission } from '@/interfaces/submissions.interface'
@@ -19,8 +19,8 @@ export class SubmissionEntity extends BaseEntity implements Submission {
   grade: number
 
   @ManyToOne(() => UserEntity, student => student.submissions, { onDelete: 'CASCADE' })
-  student: UserEntity
+  student: Relation<UserEntity>
 
   @ManyToOne(() => AssignmentEntity, assignment => assignment.submissions, { onDelete: 'CASCADE' })
-  assignment: AssignmentEntity
+  assignment: Relation<AssignmentEntity>
 }
