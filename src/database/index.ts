@@ -1,30 +1,8 @@
-import { join } from 'path'
-import { createConnection, ConnectionOptions } from 'typeorm'
-import { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB, ADMIN_EMAIL, ADMIN_PASSWORD } from '@config'
+import AppDataSource from './config'
 import { seedDb } from '@/scripts/seed'
 
 export const dbConnection = async () => {
-  const dbConfig: ConnectionOptions = {
-    type: 'postgres',
-    username: POSTGRES_USER,
-    password: POSTGRES_PASSWORD,
-    host: POSTGRES_HOST,
-    port: Number(POSTGRES_PORT),
-    database: POSTGRES_DB,
-    synchronize: false,
-    logging: false,
-    entities: [join(__dirname, '../**/*.entity{.ts,.js}')],
-    migrations: [join(__dirname, '../**/*.migration{.ts,.js}')],
-    subscribers: [join(__dirname, '../**/*.subscriber{.ts,.js}')],
-    cli: {
-      entitiesDir: 'src/entities',
-      migrationsDir: 'src/migration',
-      subscribersDir: 'src/subscriber',
-    },
-  }
-
-  const connection = await createConnection(dbConfig)
-
-  // Seed
-  seedDb(connection)
+  await AppDataSource.initialize()
+  await AppDataSource.runMigrations()
+  await seedDb()
 }
