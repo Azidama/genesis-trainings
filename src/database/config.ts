@@ -10,7 +10,6 @@ const AppDataSource = new DataSource({
   password: POSTGRES_PASSWORD,
   database: POSTGRES_DB,
   synchronize: false,
-  ssl: true,
   logging: false,
   entities: [join(__dirname, '..', 'entities', '**', '*.entity.{ts,js}')],
   migrations: [join(__dirname, '..', 'migration', '**', '*.{ts,js}')],
