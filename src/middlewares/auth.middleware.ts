@@ -1,10 +1,10 @@
 import { verify } from 'jsonwebtoken'
 import { AuthChecker } from 'type-graphql'
-import { getRepository } from 'typeorm'
 import { SECRET_KEY } from '@config'
 import { UserEntity } from '@entities/users.entity'
 import { RequestWithUser, DataStoredInToken } from '@interfaces/auth.interface'
 import { AuthenticationError } from 'apollo-server-core'
+import AppDataSource from '@/database/config'
 
 const getAuthorization = req => {
   const cookie = req.cookies['Authorization']
@@ -23,8 +23,11 @@ export const AuthMiddleware = async req => {
     if (Authorization) {
       const { user } = verify(Authorization, SECRET_KEY) as DataStoredInToken
       const id = user.id
-      const userRepository = getRepository(UserEntity)
-      const findUser = await userRepository.findOne(id, { select: ['id', 'email', 'role'] })
+      const userRepository = AppDataSource.getRepository(UserEntity)
+      const findUser = await userRepository.findOne({
+         where: { id }, 
+         select: ['id', 'email', 'role'] 
+        })
       return findUser
     }
 

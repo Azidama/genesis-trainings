@@ -1,9 +1,9 @@
 import { ADMIN_EMAIL, ADMIN_PASSWORD } from "@/config"
 import { UserEntity } from "@/entities/users.entity"
 import { UserRole } from "@/interfaces/users.interface"
-import { Connection } from "typeorm"
 import bcrypt from 'bcrypt'
 import { CourseEntity } from "@/entities/courses.entity"
+import AppDataSource from "@/database/config"
 
 export const courses = [
   {
@@ -104,8 +104,8 @@ export const courses = [
   },
 ]
 
-export const seedDb = async (connection: Connection) => {
-  const userRepo = connection.getRepository(UserEntity)
+export const seedDb = async () => {
+  const userRepo = AppDataSource.getRepository(UserEntity)
   const existingAdmin = await userRepo.findOne({ where: { role: UserRole.ADMIN } })
   if (!existingAdmin) {
     const admin = userRepo.create({
@@ -119,21 +119,16 @@ export const seedDb = async (connection: Connection) => {
   } else {
     console.log('Admin already exists')
   }
-  try {
-    const courseRepo = connection.getRepository(CourseEntity)
-    for (const course of courses) {
-      const existingCourse = await courseRepo.findOne({ where: { code: course.code } }) 
-      if(!existingCourse){
-        const createCourse = courseRepo.create({
-          code: course.code,
-          description: course.description,
-          title: course.title
-        })
-        await courseRepo.save(createCourse)
-      }
+  const courseRepo = AppDataSource.getRepository(CourseEntity)
+  for (const course of courses) {
+    const existingCourse = await courseRepo.findOne({ where: { code: course.code } }) 
+    if(!existingCourse){
+      const createCourse = courseRepo.create({
+        code: course.code,
+        description: course.description,
+        title: course.title
+      })
+      await courseRepo.save(createCourse)
     }
-    console.log('Finished seeding data into DB')
-  } catch (error) {
-    console.log('Error Seeding Courses in DB: ', error)
   }
 }
