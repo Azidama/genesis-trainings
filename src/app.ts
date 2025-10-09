@@ -23,12 +23,12 @@ process.on('uncaughtException', error => {
 export class App {
   public app: express.Application
   public env: string
-  public port: string | number
+  public port: number
 
   constructor(resolvers) {
     this.app = express()
     this.env = NODE_ENV || 'development'
-    this.port = PORT || 9000
+    this.port = Number(PORT) || 9000
 
     this.connectToDatabase()
     this.initializeMiddlewares()
@@ -37,7 +37,7 @@ export class App {
   }
 
   public async listen() {
-    this.app.listen(this.port, () => {
+    this.app.listen(this.port, '0.0.0.0', () => {
       logger.info(`=================================`)
       logger.info(`======= ENV: ${this.env} =======`)
       logger.info(`🚀 App listening on the port ${this.port}`)
