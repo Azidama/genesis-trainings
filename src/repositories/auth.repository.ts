@@ -88,10 +88,6 @@ export class AuthRepository {
       const findUser: User = await UserEntity.findOne({ where: { email: user.email } })
       if (!findUser || !user.email) throw new HttpException(409, `The email ${user.email} was not found`)
       let password = data.password
-      if (password) {
-        const hashedPassword = await hash(data.password, 10)
-        password = hashedPassword
-      }
 
       UserEntity.update({ email: user.email }, { password })
       return true
@@ -105,8 +101,7 @@ export class AuthRepository {
       const findUser: User = await UserEntity.findOne({ where: { email: userData.email } })
       if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`)
   
-      const hashedPassword = await hash(userData.password, 10)
-      const createUserData: User = await UserEntity.create({ ...userData, password: hashedPassword }).save()
+      const createUserData: User = await UserEntity.create({ ...userData, password: userData.password }).save()
 
       const mailer = new EmailService
       const subject = 'Account Signup Notification'

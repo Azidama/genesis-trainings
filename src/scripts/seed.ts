@@ -112,7 +112,7 @@ export const seedDb = async () => {
       name: 'Admin',
       email: ADMIN_EMAIL,
       role: UserRole.ADMIN,
-      password: await bcrypt.hash(ADMIN_PASSWORD, 10),
+      password: ADMIN_PASSWORD,
     })
     await userRepo.save(admin)
     console.log('Seeded admin account')

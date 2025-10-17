@@ -5,8 +5,11 @@ import { RegistrationEntity } from '@/entities/registrations.entity'
 import { Registration, RegistrationListResult } from '@/interfaces/registrations.interface'
 import { CreateRegistrationDto } from '@/dtos/registrations.dto'
 import { EmailService } from '@/services/email/email.service'
-import { registrationConfirmationEmail, registrationNotificationForStaff } from '@/utils/htmlTemplates'
-import { BREVO_SENDER_EMAIL, STAFF_EMAIL } from '@/config'
+import { accountCredentialsEmail, registrationConfirmationEmail, registrationNotificationForStaff } from '@/utils/htmlTemplates'
+import { BREVO_SENDER_EMAIL, FRONTEND_URL, STAFF_EMAIL } from '@/config'
+import { User } from '@/interfaces/users.interface'
+import { UserEntity } from '@/entities/users.entity'
+import { generatePassword } from '@/utils/generatePassword'
 
 @EntityRepository(RegistrationEntity)
 export class RegistrationRepository {
@@ -116,7 +119,33 @@ export class RegistrationRepository {
     const findRegistration: Registration = await RegistrationEntity.findOne({ where: { id: registrationId }})
     if (!findRegistration || findRegistration.deletedAt) throw new HttpException(409, "Registration doesn't exist")
 
+    const generatedPassword = generatePassword()
+    await UserEntity.create({ 
+      name: findRegistration.name,
+      fatherName: findRegistration.fatherName,
+      email: findRegistration.email,
+      phone: findRegistration.phone,
+      password: generatedPassword
+    }).save()
+
     await RegistrationEntity.update({ id: registrationId }, { approved: true })
+
+    const mailer = new EmailService
+    const subject = 'Registration Notification'
+
+    const registrationApprovedOptions = {
+      to: [{ email: findRegistration.email, name: findRegistration.name }],
+      subject,
+      from: { email: BREVO_SENDER_EMAIL, name: 'Genesis Trainings' },
+      html: accountCredentialsEmail({
+        name: findRegistration.name,
+        email: findRegistration.email,
+        password: generatedPassword,
+        frontendUrl: `${FRONTEND_URL}/login`
+      })
+    }
+    mailer.sendEmail(registrationApprovedOptions)
+
     return findRegistration
   }
 
