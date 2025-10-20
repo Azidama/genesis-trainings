@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm'
 import { join } from 'path'
-import { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB } from '@config'
+import { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB, SSL } from '@config'
 
 const AppDataSource = new DataSource({
   type: 'postgres',
@@ -10,6 +10,7 @@ const AppDataSource = new DataSource({
   password: POSTGRES_PASSWORD,
   database: POSTGRES_DB,
   synchronize: false,
+  ssl: SSL,
   logging: false,
   entities: [join(__dirname, '..', 'entities', '**', '*.entity.{ts,js}')],
   migrations: [join(__dirname, '..', 'migration', '**', '*.{ts,js}')],
