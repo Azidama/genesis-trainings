@@ -52,6 +52,9 @@ export class UserEntity extends BaseEntity implements User {
   @UpdateDateColumn()
   updatedAt: Date
 
+  @Column({ nullable: true })
+  noticeBoard: string
+
   @OneToMany(() => EnrollmentEntity, enrollment => enrollment.student, { nullable: true })
   enrollments: Relation<EnrollmentEntity>[]
 

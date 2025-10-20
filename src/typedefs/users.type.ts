@@ -10,4 +10,6 @@ export class User {
     name?: string
   @Field({ nullable: true })
     role?: string
+  @Field({ nullable: true })
+    noticeBoard?: string
 }

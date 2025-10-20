@@ -48,6 +48,9 @@ export class RegistrationEntity extends BaseEntity implements Registration {
 
   @Column('simple-array')
   courses: string[]
+    
+  @Column({ nullable: true })
+  noticeBoard: string
 
   @Column({ default: false })
   approved: boolean
