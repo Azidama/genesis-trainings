@@ -1,6 +1,6 @@
 {
-  "name": "ExpressGqlTest",
-  "version": "0.0.0",
+  "name": "trainings-server",
+  "version": "0.1.0",
   "description": "TypeScript + GraphQL + TypeORM + PostgreSQL + Express API Server",
   "author": "",
   "license": "ISC",
@@ -17,12 +17,9 @@
     "db:drop": "typeorm schema:drop -c src/database/index.ts",
     "db:sync": "typeorm schema:sync -d src/database/index.ts",
     "db:reset": "npm run db:drop && npm run db:sync",
-    "typeorm:dev": "cross-env NODE_ENV=development ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
-    "typeorm:prod": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
-    "migration:generate:dev": "npm run typeorm:dev -- migration:generate ./src/migration/Init -d ./src/database/config.ts",
-    "migration:generate:prod": "npm run typeorm:prod -- migration:generate ./src/migration/Init -d ./src/database/config.ts",
-    "migration:run:dev": "npm run typeorm:dev -- migration:run -d ./src/database/config.ts",
-    "migration:run:prod": "npm run typeorm:prod -- migration:run -d ./src/database/config.ts"
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
+    "migration:generate": "cross-env NODE_ENV=${NODE_ENV:-development} npm run typeorm -- migration:generate ./src/migration/Init -d ./src/database/config.ts",
+    "migration:run": "cross-env NODE_ENV=${NODE_ENV:-development} npm run typeorm -- migration:run -d ./src/database/config.ts"
   },
   "dependencies": {
     "apollo-server-core": "^3.10.0",
