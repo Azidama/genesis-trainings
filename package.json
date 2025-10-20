@@ -21,6 +21,7 @@
     "typeorm:prod": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "migration:generate:dev": "npm run typeorm:dev -- migration:generate ./src/migration/Init -d ./src/database/config.ts",
     "migration:generate:prod": "npm run typeorm:prod -- migration:generate ./src/migration/Init -d ./src/database/config.ts",
+    "migration:run:dev": "npm run typeorm:dev -- migration:run -d ./src/database/config.ts",
     "migration:run:prod": "npm run typeorm:prod -- migration:run -d ./src/database/config.ts"
   },
   "dependencies": {

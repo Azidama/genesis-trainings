@@ -3,6 +3,5 @@ import { seedDb } from '@/scripts/seed'
 
 export const dbConnection = async () => {
   await AppDataSource.initialize()
-  await AppDataSource.runMigrations()
   await seedDb()
 }
