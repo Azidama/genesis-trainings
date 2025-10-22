@@ -11,11 +11,14 @@ import {
   ManyToOne,
   JoinColumn,
   Relation,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm'
 import { User, UserRole } from '@interfaces/users.interface'
 import { EnrollmentEntity } from './enrollment.entity'
 import { SubmissionEntity } from './submissions.entity'
 import { BatchEntity } from './batches.entity'
+import { hash } from 'bcrypt'
 
 @Entity()
 export class UserEntity extends BaseEntity implements User {
@@ -62,4 +65,12 @@ export class UserEntity extends BaseEntity implements User {
   @Column({ nullable: true })
   @Unique(['batchId'])
   batchId: string
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    if (this.password && !this.password.startsWith('$2b$')) {
+        this.password = await hash(this.password, 10)
+    }
+  }
 }

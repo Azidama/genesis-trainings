@@ -269,3 +269,97 @@ export const userSignupTemplate = ({ name }) => `
   </body>
 </html>
 `
+export const accountCredentialsEmail = ({ name, email, password, frontendUrl }) => `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Account Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f9fc;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        text-align: center;
+      }
+      .icon {
+        font-size: 48px;
+        color: #003366;
+        margin-bottom: 20px;
+      }
+      h1 {
+        color: #003366;
+        margin-bottom: 10px;
+      }
+      p {
+        color: #555555;
+        line-height: 1.6;
+      }
+      .credentials {
+        background-color: #f0f7ff;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 20px 0;
+        text-align: left;
+        font-size: 15px;
+      }
+      .credentials strong {
+        color: #003366;
+      }
+      .button {
+        display: inline-block;
+        background-color: #003366;
+        color: #ffffff !important;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+      .contact {
+        margin-top: 25px;
+        font-size: 14px;
+        color: #333333;
+      }
+      .contact a {
+        color: #003366;
+        text-decoration: none;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="icon">👋</div>
+      <h1>Welcome Aboard, ${name}!</h1>
+      <p>
+        Your registration has been approved. You can now log in to your account
+        using the credentials below:
+      </p>
+
+      <div class="credentials">
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Password:</strong> ${password}</p>
+      </div>
+
+      <p>Use these details to access your dashboard and get started.</p>
+      <a href="${frontendUrl}" class="button" target="_blank">Go to Login</a>
+
+      <div class="contact">
+        Need help? Reach out at <a href="mailto:support@genesisengr.com">support@genesisengr.com</a><br />
+        or call us at +92 313 7344 465
+      </div>
+    </div>
+  </body>
+</html>
+`

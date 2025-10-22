@@ -22,14 +22,17 @@ export class Registration {
     phone?: string
   @Field()
     approved?: boolean
-  @Field(() => [String], {
-    nullable: true,
-  })
+  @Field(
+    () => [String], 
+    { nullable: true }
+  )
     courses?: string[]
   @Field()
     trainingMode?: string
   @Field()
     heardAboutUs?: string
+  @Field({ nullable: true })
+    noticeBoard?: string
   @Field({ nullable: true })
     createdAt?: Date
   @Field({ nullable: true })

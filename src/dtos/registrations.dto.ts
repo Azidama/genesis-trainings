@@ -48,6 +48,10 @@ export class CreateRegistrationDto implements Partial<Registration> {
 
   @Field({ nullable: true })
   @IsOptional()
+  noticeBoard?: string
+
+  @Field({ nullable: true })
+  @IsOptional()
   trainingMode?: string
 
   @Field({ nullable: true })
@@ -74,4 +78,12 @@ export class GetRegistrationDto {
   @Field({ nullable: true })
   @IsOptional()
   searchFilter?: string
+}
+
+@InputType()
+export class updateRegistrationDto {
+
+  @Field({ nullable: true })
+  @IsOptional()
+  noticeBoard: string
 }
