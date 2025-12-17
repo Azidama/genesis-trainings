@@ -4,7 +4,7 @@ import { SECRET_KEY } from '@config'
 import { UserEntity } from '@entities/users.entity'
 import { RequestWithUser, DataStoredInToken } from '@interfaces/auth.interface'
 import { AuthenticationError } from 'apollo-server-core'
-import AppDataSource from '@/database/config'
+import dataSource from '@/database/config'
 
 const getAuthorization = req => {
   const cookie = req.cookies['Authorization']
@@ -23,7 +23,7 @@ export const AuthMiddleware = async req => {
     if (Authorization) {
       const { user } = verify(Authorization, SECRET_KEY) as DataStoredInToken
       const id = user.id
-      const userRepository = AppDataSource.getRepository(UserEntity)
+      const userRepository = dataSource.getRepository(UserEntity)
       const findUser = await userRepository.findOne({
          where: { id }, 
          select: ['id', 'email', 'role'] 

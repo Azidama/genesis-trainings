@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm'
 import { join } from 'path'
 import { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB } from '@config'
 
-const AppDataSource = new DataSource({
+const dataSource = new DataSource({
   type: 'postgres',
   host: POSTGRES_HOST,
   port: Number(POSTGRES_PORT),
@@ -16,4 +16,4 @@ const AppDataSource = new DataSource({
   subscribers: [join(__dirname, '..', 'subscribers', '**', '*.{ts,js}')],
 })
 
-export default AppDataSource
+export default dataSource

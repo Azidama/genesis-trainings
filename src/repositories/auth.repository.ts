@@ -25,6 +25,9 @@ const createToken = (user: UserInfo, expiresIn: number): String => {
 const createCookie = (tokenData: TokenData): string => {
   return `Authorization=${tokenData.token}; sameSite: 'None'; httpOnly; Max-Age=${tokenData.expiresIn};`
 }
+  // TODO: move all this logic to their respective service files
+  // TODO: update all @EntityRepository() signature to newer dataSource.repository pattern
+  // since EntityRepository is now deprecated
 
 @EntityRepository(UserEntity)
 export class AuthRepository {

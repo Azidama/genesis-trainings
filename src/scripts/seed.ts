@@ -3,7 +3,7 @@ import { UserEntity } from "@/entities/users.entity"
 import { UserRole } from "@/interfaces/users.interface"
 import bcrypt from 'bcrypt'
 import { CourseEntity } from "@/entities/courses.entity"
-import AppDataSource from "@/database/config"
+import dataSource from "@/database/config"
 
 export const courses = [
   {
@@ -105,7 +105,7 @@ export const courses = [
 ]
 
 export const seedDb = async () => {
-  const userRepo = AppDataSource.getRepository(UserEntity)
+  const userRepo = dataSource.getRepository(UserEntity)
   const existingAdmin = await userRepo.findOne({ where: { role: UserRole.ADMIN } })
   if (!existingAdmin) {
     const admin = userRepo.create({
@@ -119,7 +119,7 @@ export const seedDb = async () => {
   } else {
     console.log('Admin already exists')
   }
-  const courseRepo = AppDataSource.getRepository(CourseEntity)
+  const courseRepo = dataSource.getRepository(CourseEntity)
   for (const course of courses) {
     const existingCourse = await courseRepo.findOne({ where: { code: course.code } }) 
     if(!existingCourse){

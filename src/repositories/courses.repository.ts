@@ -1,19 +1,21 @@
-import { EntityRepository } from 'typeorm'
+// import { EntityRepository } from 'typeorm'
 import { CourseEntity } from '@/entities/courses.entity'
 import { HttpException } from '@exceptions/HttpException'
 import { Course } from '@/interfaces/courses.interface'
 import { CreateCourseDto } from '@/dtos/courses.dto'
+import dataSource from '@/database/config'
 
-@EntityRepository(CourseEntity)
+// @EntityRepository(CourseEntity)
+const courseEntity = dataSource.getRepository(CourseEntity)
 export class CourseRepository {
   public async courseFindAll(): Promise<Course[]> {
-    const courses: Course[] = await CourseEntity.find()
+    const courses: Course[] = await courseEntity.find()
 
     return courses
   }
 
-  public async courseFindById(courseId: string): Promise<Course> {
-    const course: Course = await CourseEntity.findOne({ where: { id: courseId } })
+  public async courseFindById(courseId: number): Promise<Course> {
+    const course: Course = await courseEntity.findOne({ where: { id: courseId } })
     if (!course) throw new HttpException(409, "Course doesn't exist")
 
     return course
@@ -21,10 +23,10 @@ export class CourseRepository {
 
   // TODO: fix DTOs and update query
   public async courseCreate(courseData: CreateCourseDto): Promise<Course> {
-    const findCourse: Course = await CourseEntity.findOne({ where: { code: courseData.code } })
+    const findCourse: Course = await courseEntity.findOne({ where: { code: courseData.code } })
     if (findCourse) throw new HttpException(409, `This Course ${courseData.code} already exists`)
 
-    const createCourseData: Course = await CourseEntity.create({ ...courseData }).save()
+    const createCourseData: Course = await courseEntity.create({ ...courseData }).save()
 
     return createCourseData
   }
@@ -47,21 +49,21 @@ export class CourseRepository {
     return createdCourses
   }
 
-  public async courseUpdate(courseId: string, courseData: any): Promise<Course> {
-    const findCourse: Course = await CourseEntity.findOne({ where: { id: courseId } })
+  public async courseUpdate(courseId: number, courseData: any): Promise<Course> {
+    const findCourse: Course = await courseEntity.findOne({ where: { id: courseId } })
     if (!findCourse) throw new HttpException(409, "Course doesn't exist")
 
-    await CourseEntity.update(courseId, { ...courseData })
+    await courseEntity.update(courseId, { ...courseData })
 
-    const updateCourse: Course = await CourseEntity.findOne({ where: { id: courseId } })
+    const updateCourse: Course = await courseEntity.findOne({ where: { id: courseId } })
     return updateCourse
   }
 
   public async courseDelete(courseId: number): Promise<Course> {
-    const findCourse: Course = await CourseEntity.findOne({ where: { id: courseId } })
+    const findCourse: Course = await courseEntity.findOne({ where: { id: courseId } })
     if (!findCourse) throw new HttpException(409, "Course doesn't exist")
 
-    await CourseEntity.delete({ id: courseId })
+    await courseEntity.delete({ id: courseId })
     return findCourse
   }
 }
