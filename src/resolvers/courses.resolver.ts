@@ -1,17 +1,24 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from 'type-graphql'
-import { CourseRepository } from '@/repositories/courses.repository'
+import { CourseService } from '@/services/courses.service'
 import { Course } from '@/typedefs/courses.type'
 import { CreateCourseDto } from '@/dtos/courses.dto'
+import { CourseRepository } from '@/repositories/courses.repository'
 
 @Resolver()
-export class CourseResolver extends CourseRepository {
+export class CourseResolver {
+  private readonly courseService: CourseService
+
+  constructor() {
+    const repository = new CourseRepository()
+    this.courseService = new CourseService(repository)
+  }
+
   @Authorized()
   @Query(() => [Course], {
     description: 'Get courses list',
   })
   async getCourses(): Promise<Course[]> {
-    const courses: Course[] = await this.courseFindAll()
-    return courses
+    return this.courseService.findAll()
   }
 
   @Authorized()
@@ -22,7 +29,6 @@ export class CourseResolver extends CourseRepository {
     @Arg('courseData', () => [CreateCourseDto])
     courseData: CreateCourseDto[],
   ): Promise<Course[]> {
-    const courses: Course[] = await this.createManyCourses(courseData)
-    return courses
+    return this.courseService.createMany(courseData)
   }
 }
